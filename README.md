@@ -50,5 +50,5 @@ Wifi-Deyrk
 
 <a href="http://git-scm.com/">git</a>  
 <a href="https://code.google.com/p/tortoisegit/wiki/Download">tortoisegit</a>  
-<a href="https://windows.github.com/">GitHub for Windows</a>  
+<a href="https://windows.github.com/">GitHub for Windows</a> 
 
