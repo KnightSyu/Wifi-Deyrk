@@ -12,6 +12,7 @@ Wifi-Deyrk
 
 工作分配:  
 
+    (Doing)  
     一對多 - Lu's  
     互傳跳過按確認 - Lu's
     互傳文字加圖片 - 虹音的手機、Lu's、Dream41的手機  
