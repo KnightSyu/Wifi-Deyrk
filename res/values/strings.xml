@@ -3,9 +3,11 @@
 
     <string name="app_name">adhoctry</string>
     <string name="action_settings">Settings</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">接收訊息</string>
+    <string name="title_section2">推播訊息</string>
+    <string name="title_section3">互傳檔案</string>
     <string name="action_close">Close</string>
+    <string name="title_section4">收藏區</string>
+    <string name="title_section5">設定</string>
 
 </resources>

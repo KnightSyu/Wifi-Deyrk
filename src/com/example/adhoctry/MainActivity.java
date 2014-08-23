@@ -1,33 +1,18 @@
 package com.example.adhoctry;
 
 import java.util.Locale;
-
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener,OnPageChangeListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -105,11 +90,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
+    
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -118,24 +99,50 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a DummySectionFragment (defined as a static inner class
-            // below) with the page number as its lone argument.
-            Fragment fragment = new DummySectionFragment();
-            Bundle args = new Bundle();
-            args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-            fragment.setArguments(args);
-            return fragment;
+        	
+        	//選不同的頁面就建不同的碎片
+        	
+        	Fragment fragment;
+        	Bundle args = new Bundle();
+        	args.putInt(ActivityReceive.ARG_SECTION_NUMBER, position + 1);
+        	//傳bundle給碎片(目前所選的頁面位置+1，以確認所在頁面)
+        	
+        	switch (position) {
+        		case 0:
+        			fragment = new ActivityReceive();
+                    fragment.setArguments(args);
+        			return fragment;
+        		case 1:
+        			fragment = new ActivityPush();
+                    fragment.setArguments(args);
+        			return fragment;
+        		case 2:
+        			fragment = new ActivityFiles();
+                    fragment.setArguments(args);
+        			return fragment;
+        		case 3:
+        			fragment = new ActivityCollection();
+                    fragment.setArguments(args);
+        			return fragment;
+        		case 4:
+        			fragment = new ActivitySet();
+                    fragment.setArguments(args);
+        			return fragment;
+        	}
+        	return null;
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 5;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
+        	
+        	//設定頁籤標題
+        	
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
@@ -144,87 +151,31 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                     return getString(R.string.title_section2).toUpperCase(l);
                 case 2:
                     return getString(R.string.title_section3).toUpperCase(l);
+                case 3:
+                    return getString(R.string.title_section4).toUpperCase(l);
+                case 4:
+                    return getString(R.string.title_section5).toUpperCase(l);
             }
             return null;
         }
     }
-
-    /**
-     * A dummy fragment representing a section of the app, but that simply
-     * displays dummy text.
-     */
-    public static class DummySectionFragment extends ListFragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        public static final String ARG_SECTION_NUMBER = "section_number";
-        public static final String[] records = new String[] {
-        	"20",
-        	"21",
-        	"23"
-        };
-        
-        TextView dummyTextView;
-        int c = 0;
-        
-        private DB mDbHelper;
-        private Cursor mCursor;
-
-        public DummySectionFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_dummy, container, false);
-            dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-            
-            Button btn = (Button) rootView.findViewById(R.id.button1);
-            btn.setOnClickListener(mbtn1);
-            
-            setAdapter(rootView);
-        	
-        	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-
-		private void setAdapter(View rootView) {
-			mDbHelper = new DB(this.getActivity());
-            mDbHelper.open();
-            
-            mCursor = mDbHelper.getAll();
-            
-            this.getActivity().startManagingCursor(mCursor);
-            
-            String[] from_column = new String[]{DB.KEY_ITEM, DB.KEY_CREATED};
-            int[] to_layout = new int[]{android.R.id.text1, android.R.id.text2};
-            
-            SimpleCursorAdapter cadapter = new SimpleCursorAdapter(
-            	getActivity(),
-                android.R.layout.simple_list_item_2,
-                mCursor, from_column, to_layout, 0);
-            
-            setListAdapter(cadapter);
-            
-            /*
-            ListView mlist = (ListView)rootView.findViewById(R.id.listView1);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1,
-        			records);
-        	mlist.setAdapter(adapter);
-        	*/
-		}
+    
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+		// TODO Auto-generated method stub
 		
-		private OnClickListener mbtn1 = new OnClickListener() {
-		    public void onClick(View v) {
-		      // do something when the button is clicked
-		    	mDbHelper = new DB(getActivity());
-	            mDbHelper.open();
-	            dummyTextView.setText("123");
-	            mDbHelper.create("77.77");
-	            mDbHelper.close();
-		    }
-		};
-    }
+	}
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPageSelected(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
