@@ -17,9 +17,10 @@ Wifi-Deyrk
     互傳跳過按確認 - Lu's
     互傳文字加圖片 - 虹音的手機、Lu's、Dream41的手機  
     傳送訊息/存資料庫格式:標題、內文、圖片 - Dream41  
-    系統架構(五個碎片選單，如下功能分類) - KnightSyu  
+    優化系統架構 - KnightSyu  
     
     (Done)
+    系統架構(五個碎片選單，如下功能分類) - KnightSyu  
     測距離 - 虹音、Lu's、KnightSyu、Dream41  
     API - Lu's  
       
