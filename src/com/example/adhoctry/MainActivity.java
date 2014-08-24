@@ -10,7 +10,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+<<<<<<< HEAD
 import android.view.Menu;
+=======
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+>>>>>>> 46689905f798a3c5ee53f0f2a1c44d2fd29f5056
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener,OnPageChangeListener {
 
