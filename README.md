@@ -53,3 +53,13 @@ Wifi-Deyrk
 <a href="https://code.google.com/p/tortoisegit/wiki/Download">tortoisegit</a>  
 <a href="https://windows.github.com/">GitHub for Windows</a> 
 
+==========
+
+參考資料:  
+
+<a href="http://jim690701.blogspot.tw/2012/07/android-image.html">取得手機內的圖檔(轉bitmap)</a>  
+<a href="http://www.tutorialforandroid.com/2009/10/how-to-insert-image-data-to-sqlite.html">資料庫存入圖檔</a>  
+<a href="http://www.eoeandroid.com/thread-54432-1-1.html">圖片格式化顯示</a>  
+<a href="http://zhidao.baidu.com/question/293924411.html">重寫返回健按鈕</a>    
+<a href="http://android.joao.jp/2013/09/back-stack-with-nested-fragments-back.html">Back stack with nested fragments + back button</a>  
+<a href="http://forums.xamarin.com/discussion/15590/fragment-listfragment-capture-back-button-press">Fragment/ListFragment capture Back Button Press</a>  
