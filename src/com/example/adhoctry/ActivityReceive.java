@@ -1,8 +1,12 @@
 package com.example.adhoctry;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,11 +36,15 @@ public class ActivityReceive extends ListFragment {
         btn.setOnClickListener(mbtn1);
         //建構按鈕功能
         
+        Button btn2 = (Button) rootView.findViewById(R.id.button2);
+    	btn2.setOnClickListener(mbtn2);
+    	//按下ad跳出ad畫面，以後是按下listview的ad跳出ad
+        
         setAdapter(rootView);
         //建構DB
         
         dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-    	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+    	//dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
         //顯示頁面數字
     	
     	return rootView;
@@ -74,6 +82,17 @@ public class ActivityReceive extends ListFragment {
             mDbHelper.create("77.77");
             mDbHelper.close();
             //按鈕按下時新增一筆資料("77.77")給資料庫並關閉DB
+	    }
+	};
+	
+	private OnClickListener mbtn2 = new OnClickListener() {
+	    public void onClick(View v) {
+	    	
+            FragmentTransaction trans = getFragmentManager().beginTransaction();  
+            trans.replace(R.id.root_frame, new ReceiveAD());  
+            trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            trans.addToBackStack(null);  
+            trans.commit();
 	    }
 	};
 }

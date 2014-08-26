@@ -1,5 +1,6 @@
 package com.example.adhoctry;
 
+import java.util.List;
 import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -10,9 +11,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.Menu;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener,OnPageChangeListener {
+public class ActivityMain extends FragmentActivity implements ActionBar.TabListener,OnPageChangeListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -45,6 +47,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(5);
+        //上面這行是保存每頁的狀態
 
         // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
@@ -109,7 +113,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         	
         	switch (position) {
         		case 0:
-        			fragment = new ActivityReceive();
+        			fragment = new RootReceive();
                     fragment.setArguments(args);
         			return fragment;
         		case 1:
@@ -177,5 +181,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// TODO Auto-generated method stub
 		
 	}
-
+	/*
+	@Override
+	public void onBackPressed(){
+	    android.app.FragmentManager fm = getFragmentManager();
+	    if (fm.getBackStackEntryCount() > 0) {
+	        Log.i("MainActivity", "popping backstack");
+	        fm.popBackStack();
+	    } else {
+	        Log.i("MainActivity", "nothing on backstack, calling super");
+	        super.onBackPressed();  
+	    }
+	}*/
 }
