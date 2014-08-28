@@ -11,13 +11,13 @@ public class BroadCastReceiver extends BroadcastReceiver {
 	
 	private WifiP2pManager manager;
 	private Channel channel;
-	private ActivityPush activity;
+	private FilesMain activity;
 	PeerListListener myPeerListListener;
 	
 	
 	//«Øºc¤l
 	public BroadCastReceiver(WifiP2pManager mManager, Channel mChannel,
-			ActivityFiles activityFiles) {
+			FilesMain filesMain) {
 		super();
 		
 		this.manager = manager;
