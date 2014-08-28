@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class ActivityFiles extends Fragment {
+public class FilesMain extends Fragment {
     
     public static final String ARG_SECTION_NUMBER = "section_number";
     
