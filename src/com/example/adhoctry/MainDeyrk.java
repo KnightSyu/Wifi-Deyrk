@@ -14,7 +14,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.Menu;
 
-public class ActivityMain extends FragmentActivity implements ActionBar.TabListener,OnPageChangeListener {
+public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener,OnPageChangeListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -30,11 +30,13 @@ public class ActivityMain extends FragmentActivity implements ActionBar.TabListe
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    
+    boolean isBackPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.deyrk_main);
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -84,11 +86,24 @@ public class ActivityMain extends FragmentActivity implements ActionBar.TabListe
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
+    	mViewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    	android.app.FragmentManager fm = getFragmentManager();
+	    if (fm.getBackStackEntryCount() > 0) {
+	        //Log.i("堆疊大於0",""+fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1));
+	    }
+	    if(!isBackPressed){
+	    	//Log.i("頁面unselect",""+tab.getPosition());
+		    
+			FragmentTransaction trans = getFragmentManager().beginTransaction();  
+			trans.addToBackStack(tab.getPosition()+"");  
+			trans.commit();
+	    }
+	    isBackPressed = false;
+	    Log.i("堆疊數量",""+fm.getBackStackEntryCount());
     }
 
     @Override
@@ -108,28 +123,28 @@ public class ActivityMain extends FragmentActivity implements ActionBar.TabListe
         	
         	Fragment fragment;
         	Bundle args = new Bundle();
-        	args.putInt(ActivityReceive.ARG_SECTION_NUMBER, position + 1);
+        	args.putInt(ReceiveMain.ARG_SECTION_NUMBER, position + 1);
         	//傳bundle給碎片(目前所選的頁面位置+1，以確認所在頁面)
         	
         	switch (position) {
         		case 0:
-        			fragment = new RootReceive();
+        			fragment = new ReceiveRoot();
                     fragment.setArguments(args);
         			return fragment;
         		case 1:
-        			fragment = new ActivityPush();
+        			fragment = new PushRoot();
                     fragment.setArguments(args);
         			return fragment;
         		case 2:
-        			fragment = new ActivityFiles();
+        			fragment = new FilesMain();
                     fragment.setArguments(args);
         			return fragment;
         		case 3:
-        			fragment = new ActivityCollection();
+        			fragment = new CollectionMain();
                     fragment.setArguments(args);
         			return fragment;
         		case 4:
-        			fragment = new ActivitySet();
+        			fragment = new SetMain();
                     fragment.setArguments(args);
         			return fragment;
         	}
@@ -179,18 +194,22 @@ public class ActivityMain extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public void onPageSelected(int arg0) {
 		// TODO Auto-generated method stub
-		
 	}
-	/*
+	
 	@Override
 	public void onBackPressed(){
+	    
 	    android.app.FragmentManager fm = getFragmentManager();
+	    
 	    if (fm.getBackStackEntryCount() > 0) {
 	        Log.i("MainActivity", "popping backstack");
+	        //Log.i("切換到這頁",""+fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName());
+	        isBackPressed = true;
+	        mViewPager.setCurrentItem(Integer.parseInt(fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName()));
 	        fm.popBackStack();
 	    } else {
 	        Log.i("MainActivity", "nothing on backstack, calling super");
 	        super.onBackPressed();  
 	    }
-	}*/
+	}
 }

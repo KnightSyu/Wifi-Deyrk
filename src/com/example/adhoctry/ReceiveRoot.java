@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class RootReceive extends Fragment {
+public class ReceiveRoot extends Fragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -21,7 +21,10 @@ public class RootReceive extends Fragment {
 		 * When this container fragment is created, we fill it with our first
 		 * "real" fragment
 		 */
-		transaction.replace(R.id.root_frame, new ActivityReceive());
+		Fragment fm = new ReceiveMain();
+		fm.setArguments(getArguments());
+		//Ä~Äò¶Ç»¼bundle
+		transaction.replace(R.id.root_receice, fm);
 
 		transaction.commit();
 

@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-public class ActivityReceive extends ListFragment {
+public class ReceiveMain extends ListFragment {
     
     public static final String ARG_SECTION_NUMBER = "section_number";
     
@@ -24,13 +24,13 @@ public class ActivityReceive extends ListFragment {
     private DB mDbHelper;
     private Cursor mCursor;
 
-    public ActivityReceive() {
+    public ReceiveMain() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_receive, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_receive_main, container, false);
         
         Button btn = (Button) rootView.findViewById(R.id.button1);
         btn.setOnClickListener(mbtn1);
@@ -44,7 +44,7 @@ public class ActivityReceive extends ListFragment {
         //建構DB
         
         dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-    	//dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+    	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
         //顯示頁面數字
     	
     	return rootView;
@@ -87,11 +87,10 @@ public class ActivityReceive extends ListFragment {
 	
 	private OnClickListener mbtn2 = new OnClickListener() {
 	    public void onClick(View v) {
-	    	
             FragmentTransaction trans = getFragmentManager().beginTransaction();  
-            trans.replace(R.id.root_frame, new ReceiveAD());  
+            trans.replace(R.id.root_receice, new ReceiveAD());  
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            trans.addToBackStack(null);  
+            trans.addToBackStack("ReceiveMain");  
             trans.commit();
 	    }
 	};

@@ -7,19 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class ActivityCollection extends Fragment {
+public class FilesMain extends Fragment {
     
     public static final String ARG_SECTION_NUMBER = "section_number";
     
     TextView dummyTextView;
 
-    public ActivityCollection() {
+    public FilesMain() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_collection, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_files_main, container, false);
         
         dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
     	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));

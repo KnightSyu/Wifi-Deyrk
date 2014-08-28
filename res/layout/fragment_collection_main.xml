@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".ActivityPush" >
+    tools:context=".CollectionMain" >
 
     <TextView
         android:id="@+id/section_label"
@@ -17,8 +17,10 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/section_label"
-        android:layout_centerHorizontal="true"
-        android:text="push" />
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/section_label"
+        android:layout_marginRight="91dp"
+        android:layout_marginTop="64dp"
+        android:text="collection" />
 
 </RelativeLayout>

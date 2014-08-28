@@ -24,26 +24,34 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_close=0x7f080009;
-        public static final int action_settings=0x7f080008;
-        public static final int button1=0x7f080005;
-        public static final int button2=0x7f080004;
+        public static final int RelativeLayout1=0x7f080004;
+        public static final int action_close=0x7f08000c;
+        public static final int action_settings=0x7f08000b;
+        public static final int button1=0x7f080003;
+        public static final int button2=0x7f080005;
         public static final int pager=0x7f080000;
-        public static final int receive_home=0x7f080003;
-        public static final int receviead=0x7f080006;
-        public static final int root_frame=0x7f080007;
+        public static final int root_collection=0x7f080006;
+        public static final int root_files=0x7f080007;
+        public static final int root_push=0x7f080008;
+        public static final int root_receice=0x7f080009;
+        public static final int root_set=0x7f08000a;
         public static final int section_label=0x7f080001;
         public static final int textView1=0x7f080002;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
-        public static final int fragment_collection=0x7f030001;
-        public static final int fragment_files=0x7f030002;
-        public static final int fragment_push=0x7f030003;
-        public static final int fragment_receive=0x7f030004;
+        public static final int deyrk_main=0x7f030000;
+        public static final int fragment_collection_main=0x7f030001;
+        public static final int fragment_files_main=0x7f030002;
+        public static final int fragment_push_create=0x7f030003;
+        public static final int fragment_push_main=0x7f030004;
         public static final int fragment_receive_ad=0x7f030005;
-        public static final int fragment_set=0x7f030006;
-        public static final int root_receive=0x7f030007;
+        public static final int fragment_receive_main=0x7f030006;
+        public static final int fragment_set_main=0x7f030007;
+        public static final int root_collection=0x7f030008;
+        public static final int root_files=0x7f030009;
+        public static final int root_push=0x7f03000a;
+        public static final int root_receive=0x7f03000b;
+        public static final int root_set=0x7f03000c;
     }
     public static final class menu {
         public static final int main=0x7f070000;
