@@ -90,7 +90,7 @@ public class ReceiveMain extends ListFragment {
             FragmentTransaction trans = getFragmentManager().beginTransaction();  
             trans.replace(R.id.root_receice, new ReceiveAD());  
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            trans.addToBackStack("ReceiveMain");  
+            //trans.addToBackStack("ReceiveMain");  
             trans.commit();
 	    }
 	};
