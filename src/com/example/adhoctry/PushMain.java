@@ -39,7 +39,7 @@ public class PushMain extends Fragment {
             FragmentTransaction trans = getFragmentManager().beginTransaction();  
             trans.replace(R.id.root_push, new PushCreateAD());  
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            //trans.addToBackStack("PushMain");  
+            trans.addToBackStack("PushMain");  
             trans.commit();
 	    }
 	};
