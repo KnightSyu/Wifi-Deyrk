@@ -3,12 +3,16 @@ package com.example.adhoctry;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.NetworkInfo;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 
 public class BroadCastReceiver extends BroadcastReceiver {
 	
+	private final String TAG = "WiFiP2PReceiver";
 	private WifiP2pManager manager;
 	private Channel channel;
 	private FilesMain activity;
@@ -36,6 +40,7 @@ public class BroadCastReceiver extends BroadcastReceiver {
 			if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED){
 				//wifi direct 已開啟
 				
+				
 			}else{
 				
 			}
@@ -43,14 +48,26 @@ public class BroadCastReceiver extends BroadcastReceiver {
             // 呼叫 requestPeers() 去取得附近所找到的peer
         	if (manager != null) {  
                 //取得以偵測到的peer設備清單
-				manager.requestPeers(channel, myPeerListListener);  
+        		manager.requestPeers(channel, (PeerListListener) activity); 
             } 
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {  
             // peer連接發生變化時 
+        	if(manager != null){
+        		NetworkInfo networkInfo = (NetworkInfo) 
+        				intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+        		if (networkInfo.isConnected()){
+        			manager.requestConnectionInfo(channel,(ConnectionInfoListener) activity);
+        		}else{
+        			
+        		}
+        	}
+        	else{
+        		
+        	}
+        	
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {  
             // peer設備訊息變化時(ex:更改手機名稱etc...)
-        }  
-
+        	 
+        	}
 	}
-
 }

@@ -32,7 +32,7 @@ public class ReceiveMain extends ListFragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_receive_main, container, false);
         
-        Button btn = (Button) rootView.findViewById(R.id.button1);
+        Button btn = (Button) rootView.findViewById(R.id.wifidirect_search_peer);
         btn.setOnClickListener(mbtn1);
         //«Øºc«ö¶s¥\¯à
         

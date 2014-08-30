@@ -27,7 +27,7 @@ public class PushMain extends Fragment {
         dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
     	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
         
-    	Button btn = (Button) rootView.findViewById(R.id.button1);
+    	Button btn = (Button) rootView.findViewById(R.id.wifidirect_search_peer);
     	btn.setOnClickListener(mbtn);
     	
     	return rootView;
