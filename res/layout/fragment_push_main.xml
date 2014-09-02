@@ -14,7 +14,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/push"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/section_label"
@@ -22,12 +22,12 @@
         android:text="push" />
 
     <Button
-        android:id="@+id/wifidirect_search_peer"
+        android:id="@+id/createpushad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/push"
         android:layout_marginTop="58dp"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_toRightOf="@+id/push"
         android:text="create" />
 
 </RelativeLayout>

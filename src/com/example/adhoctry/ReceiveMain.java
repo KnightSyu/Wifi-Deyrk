@@ -32,11 +32,11 @@ public class ReceiveMain extends ListFragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_receive_main, container, false);
         
-        Button btn = (Button) rootView.findViewById(R.id.wifidirect_search_peer);
+        Button btn = (Button) rootView.findViewById(R.id.insertdata);
         btn.setOnClickListener(mbtn1);
         //建構按鈕功能
         
-        Button btn2 = (Button) rootView.findViewById(R.id.button2);
+        Button btn2 = (Button) rootView.findViewById(R.id.openad);
     	btn2.setOnClickListener(mbtn2);
     	//按下ad跳出ad畫面，以後是按下listview的ad跳出ad
         

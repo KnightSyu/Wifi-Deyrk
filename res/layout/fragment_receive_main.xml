@@ -22,24 +22,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/wifidirect_search_peer"
+        android:layout_below="@+id/insertdata"
         android:layout_marginTop="66dp" >
     </ListView>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/openad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/wifidirect_search_peer"
+        android:layout_alignRight="@+id/insertdata"
         android:layout_marginTop="65dp"
-        android:text="ad" />
+        android:text="openad" />
 
     <Button
-        android:id="@+id/wifidirect_search_peer"
+        android:id="@+id/insertdata"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="Button" />
+        android:text="insertdata" />
 
 </RelativeLayout>
