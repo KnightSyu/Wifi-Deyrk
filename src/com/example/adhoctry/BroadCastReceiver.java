@@ -48,7 +48,7 @@ public class BroadCastReceiver extends BroadcastReceiver {
             // 呼叫 requestPeers() 去取得附近所找到的peer
         	if (manager != null) {  
                 //取得以偵測到的peer設備清單
-        		manager.requestPeers(channel, (PeerListListener) activity); 
+        		manager.requestPeers(channel,(PeerListListener) activity); 
             } 
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {  
             // peer連接發生變化時 

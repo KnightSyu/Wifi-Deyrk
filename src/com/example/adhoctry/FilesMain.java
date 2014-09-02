@@ -34,7 +34,8 @@ PeerListListener, OnItemClickListener, ConnectionInfoListener {
     
     public static final String ARG_SECTION_NUMBER = "section_number";
     
-   private WifiP2pDeviceList peers = new WifiP2pDeviceList(); 
+   private WifiP2pDevice peers = new WifiP2pDevice();
+
    private WifiP2pManager mManager;
    private Channel mChannel;
    private final IntentFilter intentFilter = new IntentFilter();  
@@ -61,9 +62,6 @@ PeerListListener, OnItemClickListener, ConnectionInfoListener {
         search_peers = (Button)rootView.findViewById(R.id.wifidirect_search_peer);
         search_peers.setOnClickListener(search_peer);
         
-       // WifiP2pConfig config = new WifiP2pConfig();  
-        //config.deviceAddress = device.deviceAddress;  
-        //config.wps.setup = WpsInfo.PBC; 
         
         return rootView;
     }
@@ -77,7 +75,7 @@ PeerListListener, OnItemClickListener, ConnectionInfoListener {
 				@Override
 				public void onFailure(int arg0) {
 					// TODO Auto-generated method stub
-					onPeersAvailable(peers);
+				//	onPeersAvailable(peers);
 					
 				}
 
@@ -85,7 +83,7 @@ PeerListListener, OnItemClickListener, ConnectionInfoListener {
 				public void onSuccess() {
 					// TODO Auto-generated method stub
 					Toast.makeText(getActivity(), "附近有點", Toast.LENGTH_SHORT).show();
-					onPeersAvailable(peers);
+				//	onPeersAvailable(peers);
 					
 				}
 				
@@ -96,8 +94,9 @@ PeerListListener, OnItemClickListener, ConnectionInfoListener {
     };
 
 	@Override
-	public void onConnectionInfoAvailable(WifiP2pInfo arg0) {
-		// TODO Auto-generated method stub
+	public void onConnectionInfoAvailable(WifiP2pInfo info) {
+		//  onConnectInfoListener
+		
 		
 	}
 
@@ -106,14 +105,53 @@ PeerListListener, OnItemClickListener, ConnectionInfoListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void connectToDevice(WifiP2pDevice device){
+		WifiP2pConfig config = new WifiP2pConfig();  
+		config.deviceAddress = device.deviceAddress;  
+		config.wps.setup = WpsInfo.PBC;
+		mManager.connect(mChannel,config, new ActionListener() {  
+		    @Override  
+		    public void onSuccess() {  
+		       // 連接成功
+		    	Toast.makeText(getActivity(), "連接成功", Toast.LENGTH_SHORT).show();
+		    }  
+		    @Override  
+		    public void onFailure(int reason) {  
+		       // 連接失敗
+		    	String reasonString = null ;
+		    	switch(reason){
+		    	case 0:
+		    		reasonString = "網路錯誤";
+		    		break;
+		    	case 1:
+		    		reasonString = "你的設備沒有支援WifiP2p功能";
+		    		break;
+		    	case 2:
+		    		reasonString = "Framework is busy";
+		    		break;
+		    	default:
+		    		reasonString ="未知的錯誤!";
+		    		break;
+		    	}
+		    	Toast.makeText(getActivity(), "連接失敗,失敗原因:"+reasonString, Toast.LENGTH_SHORT).show();
+		    	
+		    }  
+		});
+		
+	}
+	
+
 
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
-		Collection<WifiP2pDevice> collection = peers.getDeviceList();
-		if (collection == null || collection.size() == 0){
+		Collection<WifiP2pDevice> collection = peers.getDeviceList(); 
+		if (collection == null || collection.size()==0){
 			Toast.makeText(getActivity(), "附近沒有點,或請到系統設定開啟direct", Toast.LENGTH_SHORT).show();
 		}else{
 			//更新顯示peers
+			Toast.makeText(getActivity(), "附近有點,更新顯示peer中...", Toast.LENGTH_SHORT).show();
+			//connectToDevice(peers);
 		}
 		
 	}
@@ -133,6 +171,10 @@ PeerListListener, OnItemClickListener, ConnectionInfoListener {
     public void onPause() {  
         getActivity().unregisterReceiver(mReceiver);  
         super.onPause();  
-    } 
+    }
+
+	
+
+	
 
 }
