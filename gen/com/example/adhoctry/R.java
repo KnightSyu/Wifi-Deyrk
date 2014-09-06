@@ -25,24 +25,25 @@ public final class R {
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f080009;
-        public static final int action_close=0x7f080013;
-        public static final int action_settings=0x7f080012;
+        public static final int action_close=0x7f080014;
+        public static final int action_settings=0x7f080013;
         public static final int collection=0x7f080002;
         public static final int createpushad=0x7f080007;
         public static final int files=0x7f080003;
         public static final int insertdata=0x7f08000a;
-        public static final int openad=0x7f08000b;
         public static final int pager=0x7f080000;
         public static final int push=0x7f080006;
         public static final int pushcreatead=0x7f080005;
         public static final int receivead=0x7f080008;
-        public static final int root_collection=0x7f08000d;
-        public static final int root_files=0x7f08000e;
-        public static final int root_push=0x7f08000f;
-        public static final int root_receice=0x7f080010;
-        public static final int root_set=0x7f080011;
+        public static final int root_collection=0x7f08000e;
+        public static final int root_files=0x7f08000f;
+        public static final int root_push=0x7f080010;
+        public static final int root_receice=0x7f080011;
+        public static final int root_set=0x7f080012;
         public static final int section_label=0x7f080001;
-        public static final int textView1=0x7f08000c;
+        public static final int time=0x7f08000d;
+        public static final int title=0x7f08000b;
+        public static final int title_ad=0x7f08000c;
         public static final int wifidirect_search_peer=0x7f080004;
     }
     public static final class layout {
@@ -56,11 +57,12 @@ public final class R {
         public static final int fragment_receive_ad=0x7f030007;
         public static final int fragment_receive_main=0x7f030008;
         public static final int fragment_set_main=0x7f030009;
-        public static final int root_collection=0x7f03000a;
-        public static final int root_files=0x7f03000b;
-        public static final int root_push=0x7f03000c;
-        public static final int root_receive=0x7f03000d;
-        public static final int root_set=0x7f03000e;
+        public static final int receive_collection_listview=0x7f03000a;
+        public static final int root_collection=0x7f03000b;
+        public static final int root_files=0x7f03000c;
+        public static final int root_push=0x7f03000d;
+        public static final int root_receive=0x7f03000e;
+        public static final int root_set=0x7f03000f;
     }
     public static final class menu {
         public static final int main=0x7f070000;
