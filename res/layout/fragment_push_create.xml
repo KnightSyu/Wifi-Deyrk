@@ -10,7 +10,7 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/title_addad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -19,7 +19,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/title_addad_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
@@ -27,7 +27,7 @@
             android:text="標題：" />
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/input_adtitle"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
@@ -39,7 +39,7 @@
             android:singleLine="true" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/title_addad_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
@@ -47,7 +47,7 @@
             android:text="內文：" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/input_adtext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -60,7 +60,7 @@
             android:maxLength="2000" />
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/image_ad"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -75,7 +75,7 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/button_addimage"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_gravity="center_horizontal"
@@ -92,7 +92,7 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/addad_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginBottom="10dp"
@@ -102,7 +102,7 @@
                 android:text="儲存" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/addad_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginBottom="10dp"
