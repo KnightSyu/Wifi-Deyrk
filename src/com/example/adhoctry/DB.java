@@ -24,7 +24,7 @@ public class DB {
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
 		private static final String DATABASE_NAME = "notes.db";
-		private static final int DATABASE_VERSION = 2;
+		private static final int DATABASE_VERSION = 1;
 		
 		private static final String DATABASE_CREATE = 
 				"CREATE TABLE "+DATABASE_TABLE+"("
@@ -83,7 +83,7 @@ public class DB {
 		//return db.rawQuery("SELECT * FROM "+DATABASE_TABLE+
 		//		" ORDER BY "+KEY_CREATED+" DESC", null);
 	}
-	
+	//新增DB資料
 	public long create(String record){
 		SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm",Locale.ENGLISH);
 		
@@ -92,5 +92,9 @@ public class DB {
 		args.put(KEY_ITEM, record);
 		args.put(KEY_CREATED, df.format(now.getTime()));
 		return db.insert(DATABASE_TABLE, null, args);
+	}
+	//刪除DB資料
+	public boolean delete(long rowId){
+		return db.delete(DATABASE_TABLE,KEY_ROWID + "=" + rowId, null) > 0;
 	}
 }
