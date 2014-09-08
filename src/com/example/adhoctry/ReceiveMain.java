@@ -7,6 +7,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -64,7 +66,7 @@ public class ReceiveMain extends ListFragment {
         
         this.getActivity().startManagingCursor(mCursor);
         
-        String[] from_column = new String[]{DB.KEY_ITEM, DB.KEY_CREATED};
+        String[] from_column = new String[]{DB.KEY_TITLE, DB.KEY_TIME};
         int[] to_layout = new int[]{R.id.title_ad, R.id.time};
         
         ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor);
@@ -84,11 +86,14 @@ public class ReceiveMain extends ListFragment {
 			// TODO Auto-generated method stub
 			TextView title =(TextView)view.findViewById(R.id.title_ad);
 			TextView time = (TextView)view.findViewById(R.id.time);
+			ImageView image = (ImageView)view.findViewById(R.id.image_ad);
 			title.setText(cursor.getString(
-							cursor.getColumnIndex(DB.KEY_ITEM)));
+							cursor.getColumnIndex(DB.KEY_TITLE)));
 			time.setText(cursor.getString(
-							cursor.getColumnIndex(DB.KEY_CREATED)));
-			cursor.getColumnIndex(DB.KEY_CREATED);
+							cursor.getColumnIndex(DB.KEY_TIME)));
+			byte[] bb = cursor.getBlob(cursor.getColumnIndex(DB.KEY_IMAGE));
+			image.setImageBitmap(BitmapFactory.decodeByteArray(bb, 0, bb.length));
+			cursor.getColumnIndex(DB.KEY_TIME);
 		}
 
 		@Override
@@ -107,7 +112,7 @@ public class ReceiveMain extends ListFragment {
 	    	mDbHelper = new DB(getActivity());
             mDbHelper.open();
             //dummyTextView.setText("123");
-            mDbHelper.create("77.77");
+            //mDbHelper.create("77.77",null);
             setAdapter(rootView);
             
             //按鈕按下時新增一筆資料("77.77")給資料庫並關閉DB

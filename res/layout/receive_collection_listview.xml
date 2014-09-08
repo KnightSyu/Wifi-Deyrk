@@ -19,4 +19,13 @@
         android:layout_below="@+id/title_ad"
         android:text="TextView" />
 
+    <ImageView
+        android:id="@+id/image_ad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/time"
+        android:layout_marginLeft="21dp"
+         />
+
 </RelativeLayout>

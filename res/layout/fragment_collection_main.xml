@@ -23,4 +23,20 @@
         android:layout_marginTop="64dp"
         android:text="collection" />
 
+    <Button
+        android:id="@+id/imageget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/collection"
+        android:text="選擇圖片" />
+
+    <ImageView
+        android:id="@+id/iv01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageget"
+        android:layout_centerHorizontal="true"
+        />
+
 </RelativeLayout>

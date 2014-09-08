@@ -27,13 +27,10 @@ public class PushMain extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_push_main, container, false);
-        
-<<<<<<< HEAD
+        /*
         dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
     	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-        
-=======
->>>>>>> origin/master
+        */
     	Button btn = (Button) rootView.findViewById(R.id.createpushad);
     	btn.setOnClickListener(mbtn);
     	
@@ -64,7 +61,7 @@ public class PushMain extends ListFragment {
         
         this.getActivity().startManagingCursor(mCursor);
         
-        String[] from_column = new String[]{DB.KEY_ITEM, DB.KEY_CREATED};
+        String[] from_column = new String[]{DB.KEY_TITLE, DB.KEY_TIME};
         int[] to_layout = new int[]{android.R.id.text1, android.R.id.text2};
         
         SimpleCursorAdapter cadapter = new SimpleCursorAdapter(
