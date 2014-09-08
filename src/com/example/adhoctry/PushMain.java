@@ -27,10 +27,12 @@ public class PushMain extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_push_main, container, false);
+        
         /*
         dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
     	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-        */
+    	*/
+        
     	Button btn = (Button) rootView.findViewById(R.id.createpushad);
     	btn.setOnClickListener(mbtn);
     	
