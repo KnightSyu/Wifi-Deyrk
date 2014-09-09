@@ -64,11 +64,6 @@ public class ReceiveMain extends ListFragment {
         mCursor = mDbHelper.getAll();
         //取得資料
         
-        this.getActivity().startManagingCursor(mCursor);
-        
-        String[] from_column = new String[]{DB.KEY_TITLE, DB.KEY_TIME};
-        int[] to_layout = new int[]{R.id.title_ad, R.id.time};
-        
         ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor);
         //設定接口
         

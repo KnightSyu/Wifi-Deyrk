@@ -25,11 +25,12 @@ public class DB {
 	public static final String KEY_MYLOVE = "mylove";
 	
 	
-	private static final String DATABASE_TABLE = "history";
+	private static final String DATABASE_TABLE = "push_table";
+	private static final String DATABASE_TABLE2 = "receive_collection_table";
 	
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 		
-		private static final String DATABASE_NAME = "notes.db";
+		private static final String DATABASE_NAME = "deyrkbase.db";
 		private static final int DATABASE_VERSION = 1;
 		
 		private static final String DATABASE_CREATE = 
@@ -38,7 +39,17 @@ public class DB {
 				+KEY_TITLE+" TEXT NOT NULL,"
 				+KEY_TIME+" TIMESTAMP,"
 				+KEY_CONTEXT+" TEXT,"
-				+KEY_IMAGE+" BLOB"
+				+KEY_IMAGE+" BLOB,"
+				+KEY_MYLOVE+" INTEGER"
+				+");"
+				+
+				"CREATE TABLE "+DATABASE_TABLE2+"("
+				+KEY_ROWID+" INTEGER PRIMARY KEY,"
+				+KEY_TITLE+" TEXT NOT NULL,"
+				+KEY_TIME+" TIMESTAMP,"
+				+KEY_CONTEXT+" TEXT,"
+				+KEY_IMAGE+" BLOB,"
+				+KEY_MYLOVE+" INTEGER"
 				+");";
 		
 		public DatabaseHelper(Context context, String name,
@@ -82,7 +93,7 @@ public class DB {
 	
 	public Cursor getAll(){
 		return db.query(DATABASE_TABLE,
-				new String[]{KEY_ROWID, KEY_TITLE, KEY_TIME,KEY_CONTEXT, KEY_IMAGE},
+				new String[]{KEY_ROWID, KEY_TITLE, KEY_TIME,KEY_CONTEXT, KEY_IMAGE,KEY_MYLOVE},
 				null,
 				null,
 				null,
@@ -103,6 +114,7 @@ public class DB {
 		args.put(KEY_TIME, df.format(now.getTime()));
 		args.put(KEY_IMAGE, bos.toByteArray());
 		args.put(KEY_CONTEXT, record);
+		args.put(KEY_MYLOVE, 0);
 		
 		return db.insert(DATABASE_TABLE, null, args);
 	}
