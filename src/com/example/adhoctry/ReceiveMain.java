@@ -24,8 +24,6 @@ public class ReceiveMain extends ListFragment {
     
     public static final String ARG_SECTION_NUMBER = "section_number";
     
-    TextView dummyTextView;
-    
     private DB mDbHelper;
     private Cursor mCursor;
     View rootView;
@@ -48,10 +46,6 @@ public class ReceiveMain extends ListFragment {
         
         setAdapter(rootView);
         //建構DB
-        
-        dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-    	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-        //顯示頁面數字
     	
     	return rootView;
     }
