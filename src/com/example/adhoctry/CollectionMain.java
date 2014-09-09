@@ -27,7 +27,6 @@ public class CollectionMain extends Fragment {
 	private DB mDbHelper;
     private Cursor mCursor;
     
-    TextView dummyTextView;
     View rootView;
 
     public CollectionMain() {
@@ -37,9 +36,6 @@ public class CollectionMain extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_collection_main, container, false);
-        
-        dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-    	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
         
     	Button ibtn = (Button)rootView.findViewById(R.id.imageget);
     	ibtn.setOnClickListener(imagebtn);
