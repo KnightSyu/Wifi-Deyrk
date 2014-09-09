@@ -24,8 +24,6 @@ public class ReceiveMain extends ListFragment {
     
     public static final String ARG_SECTION_NUMBER = "section_number";
     
-    TextView dummyTextView;
-    
     private DB mDbHelper;
     private Cursor mCursor;
     View rootView;
@@ -48,10 +46,6 @@ public class ReceiveMain extends ListFragment {
         
         setAdapter(rootView);
         //建構DB
-        
-        dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-    	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-        //顯示頁面數字
     	
     	return rootView;
     }
@@ -63,11 +57,6 @@ public class ReceiveMain extends ListFragment {
         
         mCursor = mDbHelper.getAll();
         //取得資料
-        
-        this.getActivity().startManagingCursor(mCursor);
-        
-        String[] from_column = new String[]{DB.KEY_TITLE, DB.KEY_TIME};
-        int[] to_layout = new int[]{R.id.title_ad, R.id.time};
         
         ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor);
         //設定接口
