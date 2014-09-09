@@ -7,13 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class CollectionAD extends Fragment {
+	
+	private View rootView;
+	
 	public CollectionAD() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-    	View rootView = inflater.inflate(R.layout.fragment_collection_ad, container, false);
+    	
+    	rootView = inflater.inflate(R.layout.fragment_collection_ad, container, false);
+    	//設定畫面所對應的XML檔
     	
     	return rootView;
     }

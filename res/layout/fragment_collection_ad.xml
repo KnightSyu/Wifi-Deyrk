@@ -12,21 +12,49 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.1" >
-
-        <TextView
-            android:id="@+id/ad_collection_title"
+        
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.9"
-            android:text="標題"
-            android:textSize="20sp" />
+            android:orientation="vertical" >
 
-        <CheckBox
-            android:id="@+id/ad_collection_mylove"
+            <TextView
+                android:id="@+id/ad_collection_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:text="標題"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/ad_collection_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:text="時間" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="match_parent"
             android:layout_weight="0.1"
-            android:text="收藏" />
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/ad_collection_mylove"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="收藏" />
+
+            <TextView
+                android:id="@+id/ad_collection_kind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="分類" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
