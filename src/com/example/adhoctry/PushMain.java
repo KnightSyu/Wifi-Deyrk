@@ -46,6 +46,7 @@ public class PushMain extends ListFragment {
 	    public void onClick(View v) {
 	    	
             FragmentTransaction trans = getFragmentManager().beginTransaction();  
+            //root_push是個容器 ,用來放fragment
             trans.replace(R.id.root_push, new PushCreateAD());  
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             //trans.addToBackStack("PushMain");  
