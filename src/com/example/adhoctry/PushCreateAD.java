@@ -32,8 +32,8 @@ public class PushCreateAD extends Fragment {
     private ImageView imageView;
     private Bitmap bitmap;
     private Spinner spinner;
-    private String[] kind = {"餐廳類", "速食類", "小吃類", "服飾類", "3C電子類",
-    						"生活家具類", "電玩遊戲類", "休閒健身類", "保養、精品類", "文具書籍類"};
+    private String[] kind = {"不分類", "餐廳類", "速食類", "小吃類", "服飾類", "3C電子類",
+    						"生活家具類", "電玩遊戲類", "休閒健身類", "保養、精品類", "文具書籍類", "其它"};
     private ArrayAdapter<String> kindList;
     private Button addimage, save, cancel;
     //宣告畫面元件變數
