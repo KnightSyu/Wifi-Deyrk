@@ -112,7 +112,7 @@ public class DB {
 	}
 	
 	//自定義函式(讓別的程式來呼叫使用)
-	public long create(String record, Bitmap imagerecord){
+	public long create(String titlerecord, String contextrecord, Bitmap imagerecord){
 		
 		//新增一筆資料
 		
@@ -125,10 +125,10 @@ public class DB {
 		//將傳進來的imagerecord轉成Bitmap格式
 		
 		ContentValues args = new ContentValues(); //宣告一個容器(args)
-		args.put(KEY_TITLE, record);
+		args.put(KEY_TITLE, titlerecord);
 		args.put(KEY_TIME, df.format(now.getTime()));
 		args.put(KEY_IMAGE, bos.toByteArray());
-		args.put(KEY_CONTEXT, record);
+		args.put(KEY_CONTEXT, contextrecord);
 		args.put(KEY_MYLOVE, 0);
 		//用put的方式將各個資料放進各個欄位
 		

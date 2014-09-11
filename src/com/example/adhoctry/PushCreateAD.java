@@ -80,7 +80,7 @@ public class PushCreateAD extends Fragment {
     		
     		mDbHelper = new DB(getActivity());
             mDbHelper.open();
-            mDbHelper.create(push_title.getText().toString(), bitmap);
+            mDbHelper.create(push_title.getText().toString(),push_context.getText().toString(), bitmap);
             //呼叫create傳入參數給DB來儲存一筆資料
             
             String kind = spinner.getSelectedItem().toString();
