@@ -94,9 +94,9 @@ public class CollectionMain extends ListFragment {
 	    super.onListItemClick(l, v, position, id);
 	    
 	    FragmentTransaction trans = getFragmentManager().beginTransaction();
+	    //trans.addToBackStack("CollectionMain");
         trans.replace(R.id.root_collection, new CollectionAD());
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        //trans.addToBackStack("ReceiveMain");
         trans.commit();
         //將root_collection(收藏區的底層容器)當前的fragment替換成CollectionAD
 	    

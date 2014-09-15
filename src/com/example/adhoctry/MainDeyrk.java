@@ -36,7 +36,7 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
         mViewPager.setOffscreenPageLimit(5);
         //保存每頁的狀態(刷來刷去不會跳回分頁首頁)
         
-        //刷來刷去時切換頁面的傾聽器
+        //刷來刷去時切換目前頁籤的傾聽器
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
