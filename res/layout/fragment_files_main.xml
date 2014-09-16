@@ -18,6 +18,48 @@
         android:text="附近的使用者"
         android:textSize="24sp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/tv_connected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已連線的使用者：" />
+
+        <TextView
+            android:id="@+id/tv_device_connected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="裝置名稱" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/connect_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="0.5"
+                android:text="連線" />
+
+            <Button
+                android:id="@+id/disconnect_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="0.5"
+                android:text="中斷" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+    
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
