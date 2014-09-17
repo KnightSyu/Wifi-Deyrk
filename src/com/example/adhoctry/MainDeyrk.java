@@ -73,6 +73,7 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    	
     }
     
     //設定接口(每個頁籤對應的分頁)
