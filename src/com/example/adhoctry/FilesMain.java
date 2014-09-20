@@ -41,7 +41,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FilesMain extends ListFragment{
+public class FilesMain extends ListFragment implements PeerListListener{
 	
 	View rootView;
 	String[] device_s = {"SyuWei 的 iphone", "Lu's GSmart", "Dream's Z1", "虹音 的 小米3"};
@@ -52,7 +52,7 @@ public class FilesMain extends ListFragment{
 	
 	IntentFilter mIntentFilter;
 	
-	WifiP2pDeviceList peers;
+	List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
 	
 	TextView device_name;
 	
@@ -61,11 +61,6 @@ public class FilesMain extends ListFragment{
             Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_files_main, container, false);
         
-        mManager = (WifiP2pManager) this.getActivity().getSystemService(Context.WIFI_P2P_SERVICE);
-        mChannel = mManager.initialize(this.getActivity(), this.getActivity().getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this.getActivity());
-        //初始化WiFiDirect
-        
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -73,15 +68,20 @@ public class FilesMain extends ListFragment{
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         //定義action(用來傾聽動作)
         
+        mManager = (WifiP2pManager) this.getActivity().getSystemService(Context.WIFI_P2P_SERVICE);
+        mChannel = mManager.initialize(this.getActivity(), this.getActivity().getMainLooper(), null);
+        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this.getActivity());
+        //初始化WiFiDirect
+        
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-                
+            	Toast.makeText(rootView.getContext(), "mManager.discoverPeers onSuccess()",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int reasonCode) {
-                
+            	Toast.makeText(rootView.getContext(),"onFailure reasonCode: "+reasonCode,Toast.LENGTH_SHORT).show();
             }
         });
         
@@ -93,17 +93,21 @@ public class FilesMain extends ListFragment{
     
     private void setAdapter(View rootView) {
     	
-    	List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
+    	final List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
+    	
+    	Toast.makeText(this.getActivity().getApplicationContext(),"peers.size(): "+peers.size(),Toast.LENGTH_SHORT).show();
     	
     	//存陣列內容(連線的裝置名稱)
-    	for(int i=0; i<device_s.length; i++)
+    	for(int i=0; i<peers.size(); i++)
     	{
     		Map<String,Object> item = new HashMap<String,Object>();
-    		item.put("device",device_s[i]);
+    		WifiP2pDevice device = peers.get(i);
+    		item.put("deviceName",device.deviceName);
+    		//item.put("deviceAddress",device.deviceAddress);
         	data.add(item);
     	}
     	
-    	SimpleAdapter adapter = new SimpleAdapter(this.getActivity(),data,R.layout.listview_files,new String[]{"device"},new int[]{R.id.device})
+    	SimpleAdapter adapter = new SimpleAdapter(this.getActivity(),data,R.layout.listview_files,new String[]{"deviceName"},new int[]{R.id.device})
     	{
     		TextView device_name;
     		@Override
@@ -113,7 +117,10 @@ public class FilesMain extends ListFragment{
 
                 Button b=(Button)v.findViewById(R.id.connect);
                 device_name = (TextView)v.findViewById(R.id.device);
-                b.setTag(device_name.getText().toString());
+                Map<String,Object> item = new HashMap<String,Object>();
+                //item = data.get(position);
+                //b.setTag(item.get("deviceAddress"));
+                b.setTag(item.get("deviceName"));
                 b.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View arg0) {
@@ -167,7 +174,11 @@ public class FilesMain extends ListFragment{
     }
     
     //當附近的點有變動時所跑的函式
+    @Override
     public void onPeersAvailable (WifiP2pDeviceList peers){
-    	this.peers = peers;
+    	this.peers.clear();
+    	this.peers.addAll(peers.getDeviceList());
+    	Toast.makeText(this.getActivity().getApplicationContext(),"onPeersAvailable size: "+this.peers.size(),Toast.LENGTH_SHORT).show();
+    	setAdapter(rootView);
     }
 }

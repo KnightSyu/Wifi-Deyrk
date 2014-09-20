@@ -8,6 +8,8 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 
 /**
  * A BroadcastReceiver that notifies of important Wi-Fi p2p events.
@@ -16,15 +18,16 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
     private Channel mChannel;
-    private Activity mActivity;
+    private FragmentActivity mActivity;
     PeerListListener myPeerListListener;
 
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, Channel channel,
-    		Activity activity) {
+    		FragmentActivity fragmentActivity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
-        this.mActivity = activity;
+        this.mActivity = fragmentActivity;
+        //Toast.makeText(this.mActivity.getApplicationContext(), "WiFiDirectBroadcastReceiver«Øºc¤l",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -47,6 +50,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             // callback on PeerListListener.onPeersAvailable()
             if (mManager != null) {
                 mManager.requestPeers(mChannel, myPeerListListener);
+                Toast.makeText(this.mActivity.getApplicationContext(), "mManager.requestPeers",Toast.LENGTH_SHORT).show();
             }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
