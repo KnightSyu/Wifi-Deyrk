@@ -41,13 +41,13 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FilesMain extends ListFragment implements PeerListListener{
+public class FilesMain extends ListFragment implements PeerListListener,ConnectionInfoListener{
 	
 	View rootView;
 	String[] device_s = {"SyuWei 的 iphone", "Lu's GSmart", "Dream's Z1", "虹音 的 小米3"};
 	
-	WifiP2pManager mManager;
-	Channel mChannel;
+	private WifiP2pManager mManager;
+	private Channel mChannel;
 	WiFiDirectBroadcastReceiver mReceiver;
 	
 	IntentFilter mIntentFilter;
@@ -73,7 +73,16 @@ public class FilesMain extends ListFragment implements PeerListListener{
         
         //初始化WiFiDirect
         
-        mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+        discoverpeers();
+        
+        setAdapter(rootView);
+        //更新畫面的ListView
+        
+        return rootView;
+    }
+
+	private void discoverpeers() {
+		mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
             	Toast.makeText(rootView.getContext(), "mManager.discoverPeers onSuccess()",Toast.LENGTH_SHORT).show();
@@ -84,12 +93,7 @@ public class FilesMain extends ListFragment implements PeerListListener{
             	Toast.makeText(rootView.getContext(),"onFailure reasonCode: "+reasonCode,Toast.LENGTH_SHORT).show();
             }
         });
-        
-        setAdapter(rootView);
-        //更新畫面的ListView
-        
-        return rootView;
-    }
+	}
     
     private void setAdapter(View rootView) {
     	
@@ -164,22 +168,29 @@ public class FilesMain extends ListFragment implements PeerListListener{
     @Override
 	public void onResume() {
         super.onResume();
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
+        mReceiver = new WiFiDirectBroadcastReceiver(mChannel, mManager, this);
         this.getActivity().registerReceiver(mReceiver, mIntentFilter);
     }
     /* unregister the broadcast receiver */
     @Override
 	public void onPause() {
-        super.onPause();
         this.getActivity().unregisterReceiver(mReceiver);
+        super.onPause();
     }
     
     //當附近的點有變動時所跑的函式
     @Override
     public void onPeersAvailable (WifiP2pDeviceList peers){
     	this.peers.clear();
+    	Collection<WifiP2pDevice> collection = peers.getDeviceList();
     	this.peers.addAll(peers.getDeviceList());
-    	Toast.makeText(this.getActivity().getApplicationContext(),"onPeersAvailable size: "+this.peers.size(),Toast.LENGTH_SHORT).show();
+    	Toast.makeText(this.getActivity().getApplicationContext(),"onPeersAvailable size: "+collection.size(),Toast.LENGTH_SHORT).show();
     	setAdapter(rootView);
     }
+
+	@Override
+	public void onConnectionInfoAvailable(WifiP2pInfo info) {
+		// TODO Auto-generated method stub
+		
+	}
 }
