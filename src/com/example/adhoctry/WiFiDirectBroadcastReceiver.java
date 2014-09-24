@@ -59,6 +59,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         	if(mManager != null){
         		NetworkInfo networkInfo = (NetworkInfo) intent  
                         .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+        		
+        		    //假如連接成功,則呼叫ConnectionInfoListener()方法
         			if(networkInfo.isConnected()){
         				mManager.requestConnectionInfo(mChannel,  
                                 (ConnectionInfoListener) mActivity);

@@ -48,12 +48,10 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 	
 	private WifiP2pManager mManager;
 	private Channel mChannel;
-	WiFiDirectBroadcastReceiver mReceiver;
-	
+	private WiFiDirectBroadcastReceiver mReceiver;
+	private int num_avaliablepeers =0;  //用來存放collection.size()所蒐集到的可用peers
 	IntentFilter mIntentFilter;
-	
 	List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
-	
 	TextView device_name;
 	
     @Override
@@ -99,7 +97,7 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     	
     	final List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
     	
-    	Toast.makeText(this.getActivity().getApplicationContext(),"peers.size(): "+peers.size(),Toast.LENGTH_SHORT).show();
+		Toast.makeText(this.getActivity().getApplicationContext(),"peers.size(): "+num_avaliablepeers,Toast.LENGTH_SHORT).show();
     	
     	//存陣列內容(連線的裝置名稱)
     	for(int i=0; i<peers.size(); i++)
@@ -113,7 +111,7 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     	
     	SimpleAdapter adapter = new SimpleAdapter(this.getActivity(),data,R.layout.listview_files,new String[]{"deviceName"},new int[]{R.id.device})
     	{
-    		TextView device_name;
+    		
     		@Override
             public View getView (int position, View convertView, ViewGroup parent)
             {
@@ -129,8 +127,8 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
                     @Override
                     public void onClick(View arg0) {
                         Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
-                        /*
-                        WifiP2pDevice device = null;
+                        
+                      /*  WifiP2pDevice device = null;
                     	WifiP2pConfig config = new WifiP2pConfig();
                     	config.deviceAddress = device.deviceAddress;
                     	mManager.connect(mChannel, config, new ActionListener() {
@@ -144,8 +142,8 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
                     	    public void onFailure(int reason) {
                     	        //failure logic
                     	    }
-                    	});
-                    	*/
+                    	});*/
+                    	
                     }
                 });
                 return v;
@@ -182,9 +180,12 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     @Override
     public void onPeersAvailable (WifiP2pDeviceList peers){
     	this.peers.clear();
-    	Collection<WifiP2pDevice> collection = peers.getDeviceList();
+    	//用來收集所發現的peers數量,並放入num_avaliablepeers
+    	Collection<WifiP2pDevice> collection = peers.getDeviceList(); 
+    	num_avaliablepeers =collection.size();
+    	
     	this.peers.addAll(peers.getDeviceList());
-    	Toast.makeText(this.getActivity().getApplicationContext(),"onPeersAvailable size: "+collection.size(),Toast.LENGTH_SHORT).show();
+    	Toast.makeText(this.getActivity().getApplicationContext(),"onPeersAvailable size: "+num_avaliablepeers,Toast.LENGTH_SHORT).show();
     	setAdapter(rootView);
     }
 
