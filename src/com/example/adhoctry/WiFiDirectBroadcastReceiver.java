@@ -19,7 +19,6 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
     private WifiP2pManager mManager;
     private Channel mChannel;
     private FragmentActivity mActivity;
-    PeerListListener myPeerListListener;
 
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, Channel channel,
     		FragmentActivity fragmentActivity) {
@@ -58,4 +57,14 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             // Respond to this device's wifi state changing
         }
     }
+    
+    private PeerListListener myPeerListListener = new PeerListListener() {
+        @Override
+        public void onPeersAvailable(WifiP2pDeviceList peerList) {
+        	
+            FilesMain.peers.clear();
+            FilesMain.peers.addAll(peerList.getDeviceList());
+            
+        }
+    };
 }

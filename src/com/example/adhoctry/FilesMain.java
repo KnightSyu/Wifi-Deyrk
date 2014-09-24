@@ -41,7 +41,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class FilesMain extends ListFragment implements PeerListListener{
+public class FilesMain extends ListFragment{
 	
 	View rootView;
 	String[] device_s = {"SyuWei 的 iphone", "Lu's GSmart", "Dream's Z1", "虹音 的 小米3"};
@@ -52,7 +52,7 @@ public class FilesMain extends ListFragment implements PeerListListener{
 	
 	IntentFilter mIntentFilter;
 	
-	List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
+	static List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
 	
 	TextView device_name;
 	
@@ -172,7 +172,7 @@ public class FilesMain extends ListFragment implements PeerListListener{
         super.onPause();
         this.getActivity().unregisterReceiver(mReceiver);
     }
-    
+    /*
     //當附近的點有變動時所跑的函式
     @Override
     public void onPeersAvailable (WifiP2pDeviceList peers){
@@ -180,5 +180,5 @@ public class FilesMain extends ListFragment implements PeerListListener{
     	this.peers.addAll(peers.getDeviceList());
     	Toast.makeText(this.getActivity().getApplicationContext(),"onPeersAvailable size: "+this.peers.size(),Toast.LENGTH_SHORT).show();
     	setAdapter(rootView);
-    }
+    }*/
 }
