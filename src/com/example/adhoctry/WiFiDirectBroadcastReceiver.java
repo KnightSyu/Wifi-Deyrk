@@ -18,15 +18,15 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
     private Channel mChannel;
-    private FragmentActivity mActivity;
+    private FilesMain mActivity;
     PeerListListener myPeerListListener;
 
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, Channel channel,
-    		FragmentActivity fragmentActivity) {
+    		FilesMain mActivity) {
         super();
         this.mManager = manager;
         this.mChannel = channel;
-        this.mActivity = fragmentActivity;
+        this.mActivity =  mActivity;
         //Toast.makeText(this.mActivity.getApplicationContext(), "WiFiDirectBroadcastReceiver«Øºc¤l",Toast.LENGTH_SHORT).show();
     }
 
@@ -50,7 +50,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             // callback on PeerListListener.onPeersAvailable()
             if (mManager != null) {
                 mManager.requestPeers(mChannel, myPeerListListener);
-                Toast.makeText(this.mActivity.getApplicationContext(), "mManager.requestPeers",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.mActivity.getActivity(), "mManager.requestPeers",Toast.LENGTH_SHORT).show();
             }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections

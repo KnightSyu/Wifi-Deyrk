@@ -48,7 +48,7 @@ public class FilesMain extends ListFragment implements PeerListListener{
 	
 	WifiP2pManager mManager;
 	Channel mChannel;
-	BroadcastReceiver mReceiver;
+	WiFiDirectBroadcastReceiver mReceiver;
 	
 	IntentFilter mIntentFilter;
 	
@@ -70,7 +70,7 @@ public class FilesMain extends ListFragment implements PeerListListener{
         
         mManager = (WifiP2pManager) this.getActivity().getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this.getActivity(), this.getActivity().getMainLooper(), null);
-        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this.getActivity());
+        
         //ªì©l¤ÆWiFiDirect
         
         mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
@@ -164,6 +164,7 @@ public class FilesMain extends ListFragment implements PeerListListener{
     @Override
 	public void onResume() {
         super.onResume();
+        mReceiver = new WiFiDirectBroadcastReceiver(mManager, mChannel, this);
         this.getActivity().registerReceiver(mReceiver, mIntentFilter);
     }
     /* unregister the broadcast receiver */
