@@ -44,16 +44,17 @@ import android.widget.Toast;
 public class FilesMain extends ListFragment implements PeerListListener,ConnectionInfoListener{
 	
 	View rootView;
-	String[] device_s = {"SyuWei 的 iphone", "Lu's GSmart", "Dream's Z1", "虹音 的 小米3"};
+	
 	
 	private WifiP2pManager mManager;
 	private Channel mChannel;
-	WiFiDirectBroadcastReceiver mReceiver;
-	
+	private WiFiDirectBroadcastReceiver mReceiver;
+	private int avaliablePeersNumber =0;  //用來存放collection.size()所蒐集到的可用peers
+	private int deviceNumber;
+	private WifiP2pInfo connectedInfo;
+	private WifiP2pDevice devices_info;
 	IntentFilter mIntentFilter;
-	
 	List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
-	
 	TextView device_name;
 	
     @Override
@@ -85,7 +86,7 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 		mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
-            	Toast.makeText(rootView.getContext(), "mManager.discoverPeers onSuccess()",Toast.LENGTH_SHORT).show();
+            	
             }
 
             @Override
@@ -99,7 +100,7 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     	
     	final List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
     	
-    	Toast.makeText(this.getActivity().getApplicationContext(),"peers.size(): "+peers.size(),Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this.getActivity().getApplicationContext(),"共有: "+avaliablePeersNumber+"個使用者",Toast.LENGTH_SHORT).show();
     	
     	//存陣列內容(連線的裝置名稱)
     	for(int i=0; i<peers.size(); i++)
@@ -113,11 +114,12 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     	
     	SimpleAdapter adapter = new SimpleAdapter(this.getActivity(),data,R.layout.listview_files,new String[]{"deviceName"},new int[]{R.id.device})
     	{
-    		TextView device_name;
+    		
     		@Override
             public View getView (int position, View convertView, ViewGroup parent)
             {
                 View v = super.getView(position, convertView, parent);
+                deviceNumber = position;  //收集device的編號
 
                 Button b=(Button)v.findViewById(R.id.connect);
                 device_name = (TextView)v.findViewById(R.id.device);
@@ -128,25 +130,12 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
                 b.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View arg0) {
-                        Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
-                        /*
-                        WifiP2pDevice device = null;
-                    	WifiP2pConfig config = new WifiP2pConfig();
-                    	config.deviceAddress = device.deviceAddress;
-                    	mManager.connect(mChannel, config, new ActionListener() {
+                       // Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
+                        connectpeers(deviceNumber);
                     	
-                    	    @Override
-                    	    public void onSuccess() {
-                    	        //success logic
-                    	    }
-                    	    
-                    	    @Override
-                    	    public void onFailure(int reason) {
-                    	        //failure logic
-                    	    }
-                    	});
-                    	*/
                     }
+
+
                 });
                 return v;
             }
@@ -181,16 +170,68 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     //當附近的點有變動時所跑的函式
     @Override
     public void onPeersAvailable (WifiP2pDeviceList peers){
+    	Toast.makeText(rootView.getContext(), "成功搜尋到使用者",Toast.LENGTH_SHORT).show();
     	this.peers.clear();
-    	Collection<WifiP2pDevice> collection = peers.getDeviceList();
+    	//用來收集所發現的peers數量,並放入num_avaliablepeers
+    	Collection<WifiP2pDevice> collection = peers.getDeviceList(); 
+    	avaliablePeersNumber =collection.size();
+    	
     	this.peers.addAll(peers.getDeviceList());
-    	Toast.makeText(this.getActivity().getApplicationContext(),"onPeersAvailable size: "+collection.size(),Toast.LENGTH_SHORT).show();
+    	Toast.makeText(this.getActivity().getApplicationContext(),"共有: "+avaliablePeersNumber+"個使用者",Toast.LENGTH_SHORT).show();
     	setAdapter(rootView);
     }
+    
+	public void connectpeers(int d_number) {
+		
+		final WifiP2pDevice device =  (WifiP2pDevice) peers.get(d_number);
+		devices_info = device;
+		WifiP2pConfig config = new WifiP2pConfig();
+		config.deviceAddress = device.deviceAddress;
+		config.wps.setup = WpsInfo.PBC;
+		config.groupOwnerIntent = 0;  //確認被連的一定是GO(Group Owner)
+		mManager.connect(mChannel, config, new ActionListener(){
 
-	@Override
-	public void onConnectionInfoAvailable(WifiP2pInfo info) {
-		// TODO Auto-generated method stub
+			@Override
+			public void onFailure(int reason) {
+				String reasonString = null;
+				switch(reason){
+		    	case 0:
+		    		reasonString = "網路錯誤";
+		    		break;
+		    	case 1:
+		    		reasonString = "你的設備沒有支援WifiP2p功能";
+		    		break;
+		    	case 2:
+		    		reasonString = "Framework is busy";
+		    		break;
+		    	default:
+		    		reasonString ="未知的錯誤!";
+		    		break;
+		    	}
+				Toast.makeText(getActivity(), "連接失敗,失敗原因:"+reasonString, Toast.LENGTH_SHORT).show();
+				
+			}
+
+			@Override
+			public void onSuccess() {
+				
+				
+			}
+			
+		});
+		
 		
 	}
+	
+	@Override
+	public void onConnectionInfoAvailable(WifiP2pInfo info) {
+		connectedInfo = info;
+		Toast.makeText(getActivity(), "info"+connectedInfo, Toast.LENGTH_SHORT).show();
+		//要做的事...要如何從被連接的狀態抓到device的資訊
+		//Toast.makeText(getActivity(), "組長:"+info.isGroupOwner, Toast.LENGTH_SHORT).show();
+		
+		
+	}
+
+
 }
