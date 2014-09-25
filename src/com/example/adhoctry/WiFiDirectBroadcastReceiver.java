@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.NetworkInfo;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
@@ -18,14 +20,15 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
     private Channel mChannel;
-    private FragmentActivity mActivity;
+    private FilesMain mActivity;
+    
 
-    public WiFiDirectBroadcastReceiver(WifiP2pManager manager, Channel channel,
-    		FragmentActivity fragmentActivity) {
+    public WiFiDirectBroadcastReceiver(Channel channel,WifiP2pManager manager,
+    		FilesMain mActivity) {
         super();
-        this.mManager = manager;
         this.mChannel = channel;
-        this.mActivity = fragmentActivity;
+        this.mManager = manager;
+        this.mActivity =  mActivity;
         //Toast.makeText(this.mActivity.getApplicationContext(), "WiFiDirectBroadcastReceiver«Øºc¤l",Toast.LENGTH_SHORT).show();
     }
 
@@ -48,23 +51,25 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             // asynchronous call and the calling activity is notified with a
             // callback on PeerListListener.onPeersAvailable()
             if (mManager != null) {
-                mManager.requestPeers(mChannel, myPeerListListener);
-                Toast.makeText(this.mActivity.getApplicationContext(), "mManager.requestPeers",Toast.LENGTH_SHORT).show();
+                mManager.requestPeers(mChannel, (PeerListListener) mActivity);
+                Toast.makeText(this.mActivity.getActivity(), "mManager.requestPeers",Toast.LENGTH_SHORT).show();
             }
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
+        	if(mManager != null){
+        		NetworkInfo networkInfo = (NetworkInfo) intent  
+                        .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+        			if(networkInfo.isConnected()){
+        				mManager.requestConnectionInfo(mChannel,  
+                                (ConnectionInfoListener) mActivity);
+        			}else{
+        				
+        			}
+        	}else{
+        		
+        	}
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             // Respond to this device's wifi state changing
         }
     }
-    
-    private PeerListListener myPeerListListener = new PeerListListener() {
-        @Override
-        public void onPeersAvailable(WifiP2pDeviceList peerList) {
-        	
-            FilesMain.peers.clear();
-            FilesMain.peers.addAll(peerList.getDeviceList());
-            
-        }
-    };
 }
