@@ -108,7 +108,7 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     		Map<String,Object> item = new HashMap<String,Object>();
     		WifiP2pDevice device = peers.get(i);
     		item.put("deviceName",device.deviceName);
-    		//item.put("deviceAddress",device.deviceAddress);
+    		item.put("devicePosition",i);
         	data.add(item);
     	}
     	
@@ -126,12 +126,12 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
                 Map<String,Object> item = new HashMap<String,Object>();
                 //item = data.get(position);
                 //b.setTag(item.get("deviceAddress"));
-                b.setTag(item.get("deviceName"));
+                b.setTag(item.get("devicePosition"));
                 b.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View arg0) {
                        // Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
-                        connectpeers(deviceNumber);
+                        connectpeers((Integer) arg0.getTag());
                     	
                     }
 
