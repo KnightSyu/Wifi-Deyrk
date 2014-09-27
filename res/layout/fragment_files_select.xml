@@ -12,6 +12,15 @@
         android:text="選擇檔案"
         android:textSize="24sp" />
 
+    <TextView
+        android:id="@+id/connected_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:text="已連線裝置" />
+
     <Button
         android:id="@+id/photo"
         android:layout_width="match_parent"
@@ -38,5 +47,14 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:text="其他檔案" />
+
+    <Button
+        android:id="@+id/disconnect"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:text="中斷連線" />
     
 </LinearLayout>
