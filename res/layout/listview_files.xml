@@ -34,12 +34,6 @@
         android:orientation="vertical"
         android:visibility="gone" >
 
-        <TextView
-            android:id="@+id/tv_mac"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Device address : " />
-
         <Button
             android:id="@+id/connect"
             android:layout_width="match_parent"

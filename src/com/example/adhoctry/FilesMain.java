@@ -124,13 +124,13 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
                 Button b=(Button)v.findViewById(R.id.connect);
                 device_name = (TextView)v.findViewById(R.id.device);
                 Map<String,Object> item = new HashMap<String,Object>();
-                //item = data.get(position);
-                //b.setTag(item.get("deviceAddress"));
+                item = data.get(position);
+                //b.setTag(item.get("deviceName"));
                 b.setTag(item.get("devicePosition"));
                 b.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View arg0) {
-                       // Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
                     	connectpeers((Integer) arg0.getTag());
                     	
                     }
@@ -229,6 +229,7 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 		Toast.makeText(getActivity(), "info"+connectedInfo, Toast.LENGTH_SHORT).show();
 		//要做的事...要如何從被連接的狀態抓到device的資訊
 		//Toast.makeText(getActivity(), "組長:"+info.isGroupOwner, Toast.LENGTH_SHORT).show();
+		
 		
 		
 	}
