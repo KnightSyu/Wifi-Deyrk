@@ -3,6 +3,7 @@ package com.example.adhoctry;
 import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,12 +17,15 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 	
     SectionsPagerAdapter mSectionsPagerAdapter; //宣告接口(五碎片刷來刷去的樣式)
     ViewPager mViewPager;
+    public Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deyrk_main);
         //設定容器(這個是最底層的容器)
+        
+        serviceIntent = new Intent(this,FileTransferService.class);
         
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

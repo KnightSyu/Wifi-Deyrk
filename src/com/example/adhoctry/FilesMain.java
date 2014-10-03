@@ -1,5 +1,6 @@
 package com.example.adhoctry;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -237,7 +238,12 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 		
 		isConnected = true;
 		connectedInfo = info;
+		String connectedInfos = connectedInfo.groupOwnerAddress.getHostAddress();
 		Toast.makeText(getActivity(), "info:"+connectedInfo, Toast.LENGTH_SHORT).show();
+		
+		Toast.makeText(getActivity(), "hostAddress:"+connectedInfos, Toast.LENGTH_SHORT).show();
+		
+		Toast.makeText(getActivity(), "OnConnectionAvaliable-running",Toast.LENGTH_LONG).show();
 
 		
 
@@ -247,13 +253,14 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     	
     	Map<String,Object> item = new HashMap<String,Object>();
         item = data.get(deviceNumber);
-        String connectedInfos = connectedInfo.groupOwnerAddress.getHostAddress();
+        
+        
         boolean isOwnerInfo = info.isGroupOwner;
         boolean isFormedInfo = info.groupFormed;
         args.putString("deviceName", (String) item.get("deviceName"));
         args.putString("connectedInfo",connectedInfos);  //抓connectionInfo到另一個fragment
-        args.putString("isOwnerInfo",isOwnerInfo+"");  //抓detailInfo到另一個fragment
-        args.putString("isFormedInfo",isFormedInfo+"");  //抓detailInfo到另一個fragment
+        args.putBoolean("isOwnerInfo",isOwnerInfo);  //抓detailInfo到另一個fragment
+        args.putBoolean("isFormedInfo",isFormedInfo);  //抓detailInfo到另一個fragment
         Fragment fragment = new FilesSelect();
         fragment.setArguments(args);
 		FragmentTransaction trans = getFragmentManager().beginTransaction();
