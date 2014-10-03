@@ -13,6 +13,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.bluetooth.BluetoothClass.Device;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.wifi.WpsInfo;
@@ -53,13 +54,20 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 	private int deviceNumber;
 	private WifiP2pInfo connectedInfo;
 	private WifiP2pDevice devices_info;
+	private int connectionCount = 0;
+	private boolean isConnected = false;
+	private int PORT =8898;
+	private boolean btn_send = false;
 	IntentFilter mIntentFilter;
 	List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
 	TextView device_name;
+	List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+    	
+    	
         rootView = inflater.inflate(R.layout.fragment_files_main, container, false);
         
         mIntentFilter = new IntentFilter();
@@ -98,7 +106,8 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     
     private void setAdapter(View rootView) {
     	
-    	final List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
+    	
+    	data.clear();
     	
 		//Toast.makeText(this.getActivity().getApplicationContext(),"共有: "+avaliablePeersNumber+"個使用者",Toast.LENGTH_SHORT).show();
     	
@@ -124,14 +133,14 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
                 Button b=(Button)v.findViewById(R.id.connect);
                 device_name = (TextView)v.findViewById(R.id.device);
                 Map<String,Object> item = new HashMap<String,Object>();
-                //item = data.get(position);
-                //b.setTag(item.get("deviceAddress"));
+                item = data.get(position);
+                //b.setTag(item.get("deviceName"));
                 b.setTag(item.get("devicePosition"));
                 b.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View arg0) {
-                       // Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
-                        connectpeers((Integer) arg0.getTag());
+                        //Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
+                    	connectpeers((Integer) arg0.getTag());
                     	
                     }
 
@@ -225,10 +234,37 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 	
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo info) {
+		
+		isConnected = true;
 		connectedInfo = info;
-		Toast.makeText(getActivity(), "info"+connectedInfo, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), "info:"+connectedInfo, Toast.LENGTH_SHORT).show();
+
+		
+
 		//要做的事...要如何從被連接的狀態抓到device的資訊
 		//Toast.makeText(getActivity(), "組長:"+info.isGroupOwner, Toast.LENGTH_SHORT).show();
+		Bundle args = new Bundle();
+    	
+    	Map<String,Object> item = new HashMap<String,Object>();
+        item = data.get(deviceNumber);
+        String connectedInfos = connectedInfo.groupOwnerAddress.getHostAddress();
+        boolean isOwnerInfo = info.isGroupOwner;
+        boolean isFormedInfo = info.groupFormed;
+        args.putString("deviceName", (String) item.get("deviceName"));
+        args.putString("connectedInfo",connectedInfos);  //抓connectionInfo到另一個fragment
+        args.putString("isOwnerInfo",isOwnerInfo+"");  //抓detailInfo到另一個fragment
+        args.putString("isFormedInfo",isFormedInfo+"");  //抓detailInfo到另一個fragment
+        Fragment fragment = new FilesSelect();
+        fragment.setArguments(args);
+		FragmentTransaction trans = getFragmentManager().beginTransaction();
+        trans.replace(R.id.root_files, fragment);
+        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        trans.commit();
+		
+		
+		
+		
+			  
 		
 		
 	}

@@ -67,10 +67,10 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         				mManager.requestConnectionInfo(mChannel,  
                                 (ConnectionInfoListener) mActivity);
         			}else{
-        				
+        				Toast.makeText(this.mActivity.getActivity(), "networinfo"+networkInfo.isConnected(),Toast.LENGTH_SHORT).show();
         			}
         	}else{
-        		
+        		Toast.makeText(this.mActivity.getActivity(), "manager==null",Toast.LENGTH_SHORT).show();
         	}
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             // Respond to this device's wifi state changing
