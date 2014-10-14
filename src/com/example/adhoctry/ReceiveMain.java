@@ -1,5 +1,6 @@
 package com.example.adhoctry;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
@@ -33,6 +34,7 @@ public class ReceiveMain extends ListFragment {
     	
     	return rootView;
     }
+    
 
 	private void setAdapter(View rootView) {
 		mDbHelper = new DB(this.getActivity());
@@ -64,12 +66,15 @@ public class ReceiveMain extends ListFragment {
 			
 			TextView title =(TextView)view.findViewById(R.id.title_ad);
 			TextView time = (TextView)view.findViewById(R.id.time);
+			TextView kind = (TextView)view.findViewById(R.id.kind);
 			//ImageView image = (ImageView)view.findViewById(R.id.image_ad);
 			
 			title.setText(cursor.getString(
 							cursor.getColumnIndex(DB.KEY_TITLE)));
 			time.setText(cursor.getString(
 							cursor.getColumnIndex(DB.KEY_TIME)));
+			kind.setText(cursor.getString(
+					cursor.getColumnIndex(DB.KEY_KIND)));
 			
 			//byte[] bb = cursor.getBlob(cursor.getColumnIndex(DB.KEY_IMAGE));
 			//image.setImageBitmap(BitmapFactory.decodeByteArray(bb, 0, bb.length));
@@ -100,14 +105,20 @@ public class ReceiveMain extends ListFragment {
 	}*/
 	
 	//當ListView有被點擊時運行的函式
+	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 	    super.onListItemClick(l, v, position, id);
 	    
 	    FragmentTransaction trans = getFragmentManager().beginTransaction();  
-        trans.replace(R.id.root_receice, new ReceiveAD());  
+        Fragment fragment = new ReceiveAD();
+        trans.replace(R.id.root_receice, fragment);
+        Bundle args = new Bundle();
+        args.putLong("section_id", id);
+        fragment.setArguments(args);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         //trans.addToBackStack("ReceiveMain");  
         trans.commit();
+        
         //將root_receice(收藏區的底層容器)當前的fragment替換成ReceiveAD
 	    
 	}

@@ -1,11 +1,13 @@
 package com.example.adhoctry;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +56,13 @@ public class PushMain extends ListFragment {
 	    	//按下時開啟PushCreateAD
 	    	
             FragmentTransaction trans = getFragmentManager().beginTransaction();
-            trans.replace(R.id.root_push, new PushCreateAD());
+            //trans.replace(R.id.root_push, new PushCreateAD());
+            Fragment fragment = new PushCreateAD();
+            trans.replace(R.id.root_push, fragment);
+            Bundle args = new Bundle();
+            args.putLong("section_id", 0);
+            fragment.setArguments(args);
+            
             //root_push是個容器 ,用來放fragment
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             //trans.addToBackStack("PushMain");
@@ -106,12 +114,15 @@ public class PushMain extends ListFragment {
 			
 			TextView title =(TextView)view.findViewById(R.id.title_ad);
 			TextView time = (TextView)view.findViewById(R.id.time);
+			TextView kind = (TextView)view.findViewById(R.id.kind);
 			//ImageView image = (ImageView)view.findViewById(R.id.image_ad);
 			
 			title.setText(cursor.getString(
 							cursor.getColumnIndex(DB.KEY_TITLE)));
 			time.setText(cursor.getString(
 							cursor.getColumnIndex(DB.KEY_TIME)));
+			kind.setText(cursor.getString(
+							cursor.getColumnIndex(DB.KEY_KIND)));
 			
 			//byte[] bb = cursor.getBlob(cursor.getColumnIndex(DB.KEY_IMAGE));
 			//image.setImageBitmap(BitmapFactory.decodeByteArray(bb, 0, bb.length));
@@ -136,10 +147,16 @@ public class PushMain extends ListFragment {
 	    super.onListItemClick(l, v, position, id);
 	    
 	    FragmentTransaction trans = getFragmentManager().beginTransaction();  
-        trans.replace(R.id.root_push, new PushCreateAD());  
+	    Fragment fragment = new PushCreateAD();
+        trans.replace(R.id.root_push, fragment);
+        Bundle args = new Bundle();
+        args.putLong("section_id", id);
+        
+        fragment.setArguments(args);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         //trans.addToBackStack("ReceiveMain");  
         trans.commit();
+        Log.d("test",""+id);
         //將root_push(推播訊息的底層容器)當前的fragment替換成PushCreateAD
 	}
 }

@@ -8,6 +8,9 @@
 package com.example.adhoctry;
 
 public final class R {
+    public static final class array {
+        public static final int kinds=0x7f060000;
+    }
     public static final class attr {
     }
     public static final class dimen {
@@ -24,57 +27,70 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int LinearLayout1=0x7f080009;
-        public static final int LinearLayout2=0x7f080017;
-        public static final int RelativeLayout1=0x7f080021;
-        public static final int aboutous=0x7f080028;
-        public static final int action_close=0x7f080032;
-        public static final int action_settings=0x7f080031;
-        public static final int ad_collection_context=0x7f080007;
-        public static final int ad_collection_image=0x7f080006;
-        public static final int ad_collection_kind=0x7f080004;
-        public static final int ad_collection_mylove=0x7f080003;
-        public static final int ad_collection_time=0x7f080002;
-        public static final int ad_collection_title=0x7f080001;
-        public static final int ad_receive_context=0x7f08001f;
-        public static final int ad_receive_image=0x7f08001e;
-        public static final int ad_receive_kind=0x7f08001c;
-        public static final int ad_receive_mylove=0x7f08001b;
-        public static final int ad_receive_time=0x7f08001a;
-        public static final int ad_receive_title=0x7f080019;
-        public static final int addad_cancel=0x7f080016;
-        public static final int addad_ok=0x7f080015;
-        public static final int button_addimage=0x7f080014;
-        public static final int createpushad=0x7f080018;
-        public static final int delete_ad_textview=0x7f080022;
-        public static final int delete_ad_time=0x7f080023;
-        public static final int files=0x7f08000b;
-        public static final int hour_textview=0x7f080024;
-        public static final int howtouse=0x7f080026;
-        public static final int imageButton_collection_next=0x7f080008;
-        public static final int imageButton_collection_pre=0x7f080005;
-        public static final int imageButton_receive_next=0x7f080020;
-        public static final int imageButton_receive_pre=0x7f08001d;
-        public static final int image_ad=0x7f080013;
-        public static final int input_adtext=0x7f080011;
-        public static final int input_adtitle=0x7f08000f;
-        public static final int kind=0x7f08002b;
-        public static final int notification_switch=0x7f080025;
-        public static final int pager=0x7f080000;
-        public static final int root_collection=0x7f08002c;
-        public static final int root_files=0x7f08002d;
-        public static final int root_push=0x7f08002e;
-        public static final int root_receice=0x7f08002f;
-        public static final int root_set=0x7f080030;
-        public static final int section_label=0x7f08000a;
-        public static final int spinner_kind=0x7f080012;
-        public static final int tellous=0x7f080027;
-        public static final int time=0x7f08002a;
-        public static final int title_ad=0x7f080029;
-        public static final int title_addad=0x7f08000d;
-        public static final int title_addad_text=0x7f080010;
-        public static final int title_addad_title=0x7f08000e;
-        public static final int wifidirect_search_peer=0x7f08000c;
+        public static final int FrameLayout1=0x7f090009;
+        public static final int LinearLayout1=0x7f09001e;
+        public static final int LinearLayout2=0x7f090035;
+        public static final int aboutous=0x7f090030;
+        public static final int action_close=0x7f09003f;
+        public static final int action_settings=0x7f09003e;
+        public static final int ad_collection_context=0x7f090007;
+        public static final int ad_collection_image=0x7f090006;
+        public static final int ad_collection_kind=0x7f090004;
+        public static final int ad_collection_mylove=0x7f090003;
+        public static final int ad_collection_time=0x7f090002;
+        public static final int ad_collection_title=0x7f090001;
+        public static final int ad_receive_context=0x7f090025;
+        public static final int ad_receive_image=0x7f090024;
+        public static final int ad_receive_kind=0x7f090022;
+        public static final int ad_receive_mylove=0x7f090021;
+        public static final int ad_receive_time=0x7f090020;
+        public static final int ad_receive_title=0x7f09001f;
+        public static final int addad_cancel=0x7f090019;
+        public static final int addad_ok=0x7f090018;
+        public static final int button_addimage=0x7f090017;
+        public static final int content_collection=0x7f09000b;
+        public static final int content_push=0x7f09001c;
+        public static final int content_receive=0x7f090028;
+        public static final int createpushad=0x7f09001a;
+        public static final int delete_ad_textview=0x7f09002a;
+        public static final int delete_ad_time=0x7f09002b;
+        public static final int files=0x7f09000e;
+        public static final int handle_collection=0x7f09000c;
+        public static final int handle_push=0x7f09001d;
+        public static final int handle_receive=0x7f090029;
+        public static final int hour_textview=0x7f09002c;
+        public static final int howtouse=0x7f09002e;
+        public static final int imageButton_collection_next=0x7f090008;
+        public static final int imageButton_collection_pre=0x7f090005;
+        public static final int imageButton_receive_next=0x7f090026;
+        public static final int imageButton_receive_pre=0x7f090023;
+        public static final int image_ad=0x7f090016;
+        public static final int input_adtext=0x7f090014;
+        public static final int input_adtitle=0x7f090012;
+        public static final int kind=0x7f090038;
+        public static final int kind_push=0x7f090033;
+        public static final int notification_switch=0x7f09002d;
+        public static final int pager=0x7f090000;
+        public static final int root_collection=0x7f090039;
+        public static final int root_files=0x7f09003a;
+        public static final int root_push=0x7f09003b;
+        public static final int root_receice=0x7f09003c;
+        public static final int root_set=0x7f09003d;
+        public static final int section_label=0x7f09000d;
+        public static final int slidingDrawer_collection=0x7f09000a;
+        public static final int slidingDrawer_push=0x7f09001b;
+        public static final int slidingDrawer_receive=0x7f090027;
+        public static final int spinner_kind=0x7f090015;
+        public static final int tellous=0x7f09002f;
+        public static final int time=0x7f090037;
+        public static final int time_push=0x7f090032;
+        public static final int title_ad=0x7f090036;
+        public static final int title_ad_push=0x7f090031;
+        public static final int title_addad=0x7f090010;
+        public static final int title_addad_text=0x7f090013;
+        public static final int title_addad_title=0x7f090011;
+        public static final int toggleButton_push=0x7f090034;
+        public static final int wifidirect_search_peer=0x7f09000f;
     }
     public static final class layout {
         public static final int deyrk_main=0x7f030000;
@@ -87,15 +103,16 @@ public final class R {
         public static final int fragment_receive_ad=0x7f030007;
         public static final int fragment_receive_main=0x7f030008;
         public static final int fragment_set_main=0x7f030009;
-        public static final int listview_receive_collection=0x7f03000a;
-        public static final int root_collection=0x7f03000b;
-        public static final int root_files=0x7f03000c;
-        public static final int root_push=0x7f03000d;
-        public static final int root_receive=0x7f03000e;
-        public static final int root_set=0x7f03000f;
+        public static final int listview_push=0x7f03000a;
+        public static final int listview_receive_collection=0x7f03000b;
+        public static final int root_collection=0x7f03000c;
+        public static final int root_files=0x7f03000d;
+        public static final int root_push=0x7f03000e;
+        public static final int root_receive=0x7f03000f;
+        public static final int root_set=0x7f030010;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
+        public static final int main=0x7f080000;
     }
     public static final class string {
         public static final int action_close=0x7f050005;
@@ -136,10 +153,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060000;
+        public static final int AppBaseTheme=0x7f070000;
         /**  Application theme. 
  All customizations that are NOT specific to a particular API-level can go here. 
          */
-        public static final int AppTheme=0x7f060001;
+        public static final int AppTheme=0x7f070001;
     }
 }

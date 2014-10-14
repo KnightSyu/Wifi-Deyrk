@@ -39,7 +39,7 @@ public class CollectionMain extends ListFragment {
         mDbHelper.open();
         //打開DB
         
-        mCursor = mDbHelper.getAll();
+        mCursor = mDbHelper.getMylove();
         //呼叫DB的getAll函式，取得資料放進mCursor(資料庫資料的容器)
         
         ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor);
