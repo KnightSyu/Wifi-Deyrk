@@ -109,14 +109,19 @@ public class ReceiveMain extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 	    super.onListItemClick(l, v, position, id);
 	    
+<<<<<<< HEAD
 	    FragmentTransaction trans = getFragmentManager().beginTransaction();  
         Fragment fragment = new ReceiveAD();
         trans.replace(R.id.root_receice, fragment);
         Bundle args = new Bundle();
         args.putLong("section_id", id);
         fragment.setArguments(args);
+=======
+	    FragmentTransaction trans = getFragmentManager().beginTransaction();
+	    //trans.addToBackStack("ReceiveMain");
+        trans.replace(R.id.root_receice, new ReceiveAD());
+>>>>>>> 1b7b4ce3c1557366e28bb17f7f33bcee6055f337
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        //trans.addToBackStack("ReceiveMain");  
         trans.commit();
         
         //將root_receice(收藏區的底層容器)當前的fragment替換成ReceiveAD
