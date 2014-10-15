@@ -180,14 +180,13 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     //當附近的點有變動時所跑的函式
     @Override
     public void onPeersAvailable (WifiP2pDeviceList peers){
-    	Toast.makeText(rootView.getContext(), "成功搜尋到使用者",Toast.LENGTH_SHORT).show();
     	this.peers.clear();
     	//用來收集所發現的peers數量,並放入num_avaliablepeers
     	Collection<WifiP2pDevice> collection = peers.getDeviceList(); 
     	avaliablePeersNumber =collection.size();
     	
     	this.peers.addAll(peers.getDeviceList());
-    	Toast.makeText(this.getActivity().getApplicationContext(),"共有: "+avaliablePeersNumber+"個使用者",Toast.LENGTH_SHORT).show();
+    	Toast.makeText(rootView.getContext(),"onPeersAvailable,共有: "+avaliablePeersNumber+"個使用者",Toast.LENGTH_SHORT).show();
     	setAdapter(rootView);
     }
     
@@ -209,7 +208,7 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 		    		reasonString = "網路錯誤";
 		    		break;
 		    	case 1:
-		    		reasonString = "你的設備沒有支援WifiP2p功能";
+		    		reasonString = "您的設備沒有支援WifiP2p功能";
 		    		break;
 		    	case 2:
 		    		reasonString = "Framework is busy";
@@ -267,14 +266,5 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
         trans.replace(R.id.root_files, fragment);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
-		
-		
-		
-		
-			  
-		
-		
 	}
-
-
 }

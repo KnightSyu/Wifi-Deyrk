@@ -1,11 +1,20 @@
 package com.example.adhoctry;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import android.support.v4.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -49,9 +58,11 @@ public class FilesSelect extends Fragment {
     	onClickListeners();
     	connected_device.setText(device_info);
     	
+    	new FileServerAsyncTask(this.getActivity()).execute(PORT+"","20");
+    	
     	//transferUpdate();
     	
-    	Toast.makeText(getActivity(), "OnCreateView-running",Toast.LENGTH_LONG).show();
+    	//Toast.makeText(getActivity(), "OnCreateView-running",Toast.LENGTH_LONG).show();
     	
     	return rootView;
     }
@@ -98,7 +109,7 @@ public class FilesSelect extends Fragment {
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);  
             intent.setType("image/*");  
             startActivityForResult(intent, 20); 
-			
+            
 		}
 		
 	};
@@ -134,45 +145,48 @@ public class FilesSelect extends Fragment {
 		@Override
 		public void onClick(View arg0) {
 			 transferUpdate();
-			
 		}
 		
 	};
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {  
-        if (requestCode == 20) {  
-        	//Context ctx_send = (Context) this.getActivity();
-    		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
-            Uri uri = data.getData();  
-            serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
-            serviceIntent.putExtra("uri", uri.toString());  
-            serviceIntent.putExtra("host",connectedInfo);  
-            serviceIntent.putExtra("port", PORT);
-            serviceIntent.putExtra("requestCode", requestCode);
-            Toast.makeText(this.getActivity(),"uri:"+uri.toString()+"/host:"+connectedInfo+"/port:"+PORT,Toast.LENGTH_LONG).show();
-            getActivity().startService(serviceIntent);
-        }else if(requestCode== 30){
-        	Context ctx_send = (Context) this.getActivity();
-    		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
-            Uri uri = data.getData();  
-            serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
-            serviceIntent.putExtra("uri", uri.toString());  
-            serviceIntent.putExtra("host",connectedInfo);  
-            serviceIntent.putExtra("port", PORT);
-            serviceIntent.putExtra("requestCode", requestCode);
-            //d_name2.setText("uri:"+uri.toString()+"/host:"+connectedInfo.groupOwnerAddress.getHostAddress()+"/port:"+PORT);
-            ctx_send.startService(serviceIntent);
-        }else if(requestCode== 40){
-        	Context ctx_send = (Context) this.getActivity();
-    		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
-            Uri uri = data.getData();  
-            serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
-            serviceIntent.putExtra("uri", uri.toString());  
-            serviceIntent.putExtra("host",connectedInfo);  
-            serviceIntent.putExtra("port", PORT);
-            serviceIntent.putExtra("requestCode", requestCode);
-            //d_name2.setText("uri:"+uri.toString()+"/host:"+connectedInfo.groupOwnerAddress.getHostAddress()+"/port:"+PORT);
-            ctx_send.startService(serviceIntent);
+        if(data!=null){
+        	if (requestCode == 20) {  
+            	//Context ctx_send = (Context) this.getActivity();
+        		/*Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
+                Uri uri = data.getData();  
+                serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
+                serviceIntent.putExtra("uri", uri.toString());  
+                serviceIntent.putExtra("host",connectedInfo);  
+                serviceIntent.putExtra("port", PORT);
+                serviceIntent.putExtra("requestCode", requestCode);
+                Toast.makeText(this.getActivity(),"uri:"+uri.toString()+"/host:"+connectedInfo+"/port:"+PORT,Toast.LENGTH_LONG).show();
+                getActivity().startService(serviceIntent);*/
+        		Uri uri = data.getData();
+                new FileClientAsyncTask(this.getActivity()).execute(uri.toString(),connectedInfo,PORT+"");
+            }else if(requestCode== 30){
+            	Context ctx_send = (Context) this.getActivity();
+        		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
+                Uri uri = data.getData();  
+                serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
+                serviceIntent.putExtra("uri", uri.toString());  
+                serviceIntent.putExtra("host",connectedInfo);  
+                serviceIntent.putExtra("port", PORT);
+                serviceIntent.putExtra("requestCode", requestCode);
+                //d_name2.setText("uri:"+uri.toString()+"/host:"+connectedInfo.groupOwnerAddress.getHostAddress()+"/port:"+PORT);
+                ctx_send.startService(serviceIntent);
+            }else if(requestCode== 40){
+            	Context ctx_send = (Context) this.getActivity();
+        		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
+                Uri uri = data.getData();  
+                serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
+                serviceIntent.putExtra("uri", uri.toString());  
+                serviceIntent.putExtra("host",connectedInfo);  
+                serviceIntent.putExtra("port", PORT);
+                serviceIntent.putExtra("requestCode", requestCode);
+                //d_name2.setText("uri:"+uri.toString()+"/host:"+connectedInfo.groupOwnerAddress.getHostAddress()+"/port:"+PORT);
+                ctx_send.startService(serviceIntent);
+            }
         }
     }
 

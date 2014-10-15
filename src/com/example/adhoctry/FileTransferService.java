@@ -13,6 +13,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
 import android.widget.Toast;
 
 public class FileTransferService extends IntentService {
@@ -23,9 +24,8 @@ public class FileTransferService extends IntentService {
     public static final String ACTION_RECEIVE_FILE = "REVEICE_FILE";
     public int count=0;
     private int requestCode =0;
-
     
-    
+    Handler mHandler;
     
 	public FileTransferService() {
 		super("FileTransferService");
@@ -33,10 +33,9 @@ public class FileTransferService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
- 
+		
 		count+=1;
-		Toast.makeText(getApplicationContext(), "有進入onHandleIntent！"+count+"次",  
-                Toast.LENGTH_SHORT).show();
+		Toast.makeText(getApplicationContext(), "有進入onHandleIntent！"+count+"次",Toast.LENGTH_SHORT).show();
 		if (intent.getAction().equals(ACTION_SEND_FILE)){ // 傳送資料
             String uri = intent.getExtras().getString("uri");  
             String host = intent.getExtras().getString("host");  
@@ -81,8 +80,8 @@ public class FileTransferService extends IntentService {
 			try{
 				Toast.makeText(getApplicationContext(), "文件開始接收！",  
                         Toast.LENGTH_SHORT).show();
-				int port = intent.getExtras().getInt("port");  
-                ServerSocket serverSocket = new ServerSocket(port);  
+				int port1 = intent.getExtras().getInt("port");  
+                ServerSocket serverSocket = new ServerSocket(port1);  
                 Socket client = serverSocket.accept();
                 
                 if(requestCode==20){ //傳送圖片
