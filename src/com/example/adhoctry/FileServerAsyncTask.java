@@ -49,6 +49,22 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
                 
                 return f.getAbsolutePath();
             }
+            else if(Integer.parseInt(params[1])==30){ //接收影片
+            	final File f = new File(Environment.getExternalStorageDirectory() + "/"
+                        + context.getPackageName() + "/wifip2pshared-" + System.currentTimeMillis()
+                        + ".mp4");
+                File dirs = new File(f.getParent());
+                if (!dirs.exists()) {
+                    dirs.mkdirs();  //創建資料夾
+                }
+                f.createNewFile();
+                InputStream inputstream = client.getInputStream();
+                copyFile(inputstream, new FileOutputStream(f));
+                serverSocket.close();
+                client.close();
+                
+                return f.getAbsolutePath();
+            }
             else{
             	return null;
             }

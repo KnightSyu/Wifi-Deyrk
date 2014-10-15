@@ -24,12 +24,12 @@ import android.widget.Toast;
 public class FileClientAsyncTask extends AsyncTask<String, Integer, String> {
 
     private Context context;
-    //private TextView statusText;
+    private TextView statusText;
     private static final int SOCKET_TIMEOUT = 5000;
 
-    public FileClientAsyncTask(Context context) {
+    public FileClientAsyncTask(Context context,TextView statusText) {
         this.context = context;
-        //this.statusText = (TextView) statusText;
+        this.statusText = (TextView) statusText;
     }
 
     protected String doInBackground(String... params) {
@@ -84,6 +84,10 @@ public class FileClientAsyncTask extends AsyncTask<String, Integer, String> {
             is.close();
         }*/
 	}
+    
+    protected void onProgressUpdate(Integer... progresses) { 
+    	statusText.setText("¶Ç°e¶i«×: " + progresses[0] + "%");
+    }
     
     protected void onPostExecute(String result) {
         if (result != null) {

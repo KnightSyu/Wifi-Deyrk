@@ -58,7 +58,7 @@ public class FilesSelect extends Fragment {
     	onClickListeners();
     	connected_device.setText(device_info);
     	
-    	new FileServerAsyncTask(this.getActivity()).execute(PORT+"","20");
+    	//new FileServerAsyncTask(this.getActivity()).execute(PORT+"","20");
     	
     	//transferUpdate();
     	
@@ -163,9 +163,9 @@ public class FilesSelect extends Fragment {
                 Toast.makeText(this.getActivity(),"uri:"+uri.toString()+"/host:"+connectedInfo+"/port:"+PORT,Toast.LENGTH_LONG).show();
                 getActivity().startService(serviceIntent);*/
         		Uri uri = data.getData();
-                new FileClientAsyncTask(this.getActivity()).execute(uri.toString(),connectedInfo,PORT+"");
+                new FileClientAsyncTask(this.getActivity(),(TextView)rootView.findViewById(R.id.Progress)).execute(uri.toString(),connectedInfo,PORT+"");
             }else if(requestCode== 30){
-            	Context ctx_send = (Context) this.getActivity();
+            	/*Context ctx_send = (Context) this.getActivity();
         		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
                 Uri uri = data.getData();  
                 serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
@@ -174,7 +174,9 @@ public class FilesSelect extends Fragment {
                 serviceIntent.putExtra("port", PORT);
                 serviceIntent.putExtra("requestCode", requestCode);
                 //d_name2.setText("uri:"+uri.toString()+"/host:"+connectedInfo.groupOwnerAddress.getHostAddress()+"/port:"+PORT);
-                ctx_send.startService(serviceIntent);
+                ctx_send.startService(serviceIntent);*/
+                Uri uri = data.getData();
+                new FileClientAsyncTask(this.getActivity(),(TextView)rootView.findViewById(R.id.Progress)).execute(uri.toString(),connectedInfo,PORT+"");
             }else if(requestCode== 40){
             	Context ctx_send = (Context) this.getActivity();
         		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
