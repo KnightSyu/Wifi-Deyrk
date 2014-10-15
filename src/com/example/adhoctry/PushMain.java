@@ -56,7 +56,7 @@ public class PushMain extends ListFragment {
 	    	//按下時開啟PushCreateAD
 	    	
             FragmentTransaction trans = getFragmentManager().beginTransaction();
-<<<<<<< HEAD
+
             //trans.replace(R.id.root_push, new PushCreateAD());
             Fragment fragment = new PushCreateAD();
             trans.replace(R.id.root_push, fragment);
@@ -64,10 +64,10 @@ public class PushMain extends ListFragment {
             args.putLong("section_id", 0);
             fragment.setArguments(args);
             
-=======
+
             //trans.addToBackStack("PushMain");
-            trans.replace(R.id.root_push, new PushCreateAD());
->>>>>>> 1b7b4ce3c1557366e28bb17f7f33bcee6055f337
+            
+
             //root_push是個容器 ,用來放fragment
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             trans.commit();
@@ -150,7 +150,7 @@ public class PushMain extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 	    super.onListItemClick(l, v, position, id);
 	    
-<<<<<<< HEAD
+
 	    FragmentTransaction trans = getFragmentManager().beginTransaction();  
 	    Fragment fragment = new PushCreateAD();
         trans.replace(R.id.root_push, fragment);
@@ -158,11 +158,9 @@ public class PushMain extends ListFragment {
         args.putLong("section_id", id);
         
         fragment.setArguments(args);
-=======
-	    FragmentTransaction trans = getFragmentManager().beginTransaction();
-	    //trans.addToBackStack("PushMain");
-        trans.replace(R.id.root_push, new PushCreateAD());
->>>>>>> 1b7b4ce3c1557366e28bb17f7f33bcee6055f337
+
+	   
+
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
         Log.d("test",""+id);
