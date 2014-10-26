@@ -15,21 +15,49 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.1" >
-
-        <TextView
-            android:id="@+id/textView1"
+        
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.9"
-            android:text="標題"
-            android:textSize="20sp" />
+            android:orientation="vertical" >
 
-        <CheckBox
-            android:id="@+id/checkBox1"
+            <TextView
+                android:id="@+id/ad_receive_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:text="標題"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/ad_receive_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.9"
+                android:text="時間" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="match_parent"
             android:layout_weight="0.1"
-            android:text="收藏" />
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/ad_receive_mylove"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="收藏" />
+
+            <TextView
+                android:id="@+id/ad_receive_kind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="分類" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -39,7 +67,7 @@
         android:layout_weight="0.9" >
 
         <ImageButton
-            android:id="@+id/imageButton1"
+            android:id="@+id/imageButton_receive_pre"
             android:layout_width="10dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -53,13 +81,13 @@
             android:orientation="vertical" >
 
             <ImageView
-                android:id="@+id/imageView1"
+                android:id="@+id/ad_receive_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/ad_receive_context"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -68,7 +96,7 @@
         </LinearLayout>
         
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/imageButton_receive_next"
             android:layout_width="10dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

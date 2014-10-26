@@ -1,9 +1,9 @@
 package com.example.adhoctry;
 
-import java.util.List;
 import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -11,48 +11,36 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.Menu;
 
 public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener,OnPageChangeListener {
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-     * will keep every loaded fragment in memory. If this becomes too memory
-     * intensive, it may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+	
+    SectionsPagerAdapter mSectionsPagerAdapter; //宣告接口(五碎片刷來刷去的樣式)
     ViewPager mViewPager;
+    public Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deyrk_main);
-
-        // Set up the action bar.
+        //設定容器(這個是最底層的容器)
+        
+        serviceIntent = new Intent(this,FileTransferService.class);
+        
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the app.
+        //設定action bar樣式(上面五個分頁頁籤的樣式)
+        
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        //設定接口(設定對應的五個fragment)
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        //設定ViewPager(頁面)
         mViewPager.setOffscreenPageLimit(5);
-        //上面這行是保存每頁的狀態
-
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
+        //保存每頁的狀態(刷來刷去不會跳回分頁首頁)
+        
+        //刷來刷去時切換目前頁籤的傾聽器
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -60,14 +48,10 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
             }
         });
 
-        // For each of the sections in the app, add a tab to the action bar.
+        //設定每個頁籤的文字內容
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
+        	
+            actionBar.addTab(actionBar.newTab()
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
@@ -75,26 +59,28 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+    	//內建的"設定" (Setting那個)
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
     
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in
-        // the ViewPager.
+        //當頁籤被點擊，切換為該頁籤畫面
     	mViewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    	//當頁籤沒有被選擇時會呼叫的函式
     }
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    	
     }
     
+    //設定接口(每個頁籤對應的分頁)
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -108,8 +94,8 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
         	
         	Fragment fragment;
         	Bundle args = new Bundle();
-        	args.putInt(ReceiveMain.ARG_SECTION_NUMBER, position + 1);
-        	//傳bundle給碎片(目前所選的頁面位置+1，以確認所在頁面)
+        	args.putInt("section_number", position + 1);
+        	//傳bundle給碎片(目前所選的頁面位置+1)
         	
         	switch (position) {
         		case 0:
@@ -138,14 +124,14 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            //設定有幾個頁籤
             return 5;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
         	
-        	//設定頁籤標題
+        	//設定頁籤的標題
         	
             Locale l = Locale.getDefault();
             switch (position) {
@@ -166,18 +152,13 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     
 	@Override
 	public void onPageScrollStateChanged(int arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onPageSelected(int arg0) {
-		// TODO Auto-generated method stub
 	}
 }

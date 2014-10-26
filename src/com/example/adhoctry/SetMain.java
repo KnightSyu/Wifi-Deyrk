@@ -61,7 +61,7 @@ public class SetMain extends Fragment {
     			new AlertDialog.Builder(getActivity())
     			.setTitle("關於我們!")
     			.setMessage("＊＊＊＊＊＊＊＊＊＊＊\n" +
-    						"主員，指導老師都很帥！\n" +
+    						"組員，指導老師都很帥！\n" +
     						"＊＊＊＊＊＊＊＊＊＊＊")
     			//.setNeutralButton("確定", null)
     			.show();
@@ -74,7 +74,7 @@ public class SetMain extends Fragment {
     			new AlertDialog.Builder(getActivity())
     			.setTitle("關於我們!")
     			.setMessage("＊＊＊＊＊＊＊＊＊＊＊\n" +
-    						"主員，指導老師都很帥！\n" +
+    						"組員，指導老師都很帥！\n" +
     						"＊＊＊＊＊＊＊＊＊＊＊")
     			.setNeutralButton("確定", null)
     			.show();

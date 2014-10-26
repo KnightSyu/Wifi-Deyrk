@@ -16,5 +16,18 @@
     <string name="connect_peer_button">連接</string>
     <string name="disconnect_peer_button">離線</string>
     <string name="get_file_button">啟動圖庫</string>
-
+    <string-array name="kinds">
+        <item >不分類</item>
+        <item >餐飲類</item>
+        <item >速食類</item>
+        <item >小吃類</item>
+        <item >服飾類</item>
+        <item >3C電子類</item>
+        <item >生活家具類</item>
+        <item >電玩遊戲類</item>
+        <item >休閒健身類</item>
+        <item >保養、精品類</item>
+        <item >文具書籍類</item>
+        <item >其它</item>
+    </string-array>    
 </resources>
