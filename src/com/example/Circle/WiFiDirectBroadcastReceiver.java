@@ -52,7 +52,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             // callback on PeerListListener.onPeersAvailable()
             if (mManager != null) {
                 mManager.requestPeers(mChannel, (PeerListListener) mActivity);
-                Toast.makeText(this.mActivity.getActivity(), "WIFI_P2P_PEERS_CHANGED_ACTION",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this.mActivity.getActivity(), "WIFI_P2P_PEERS_CHANGED_ACTION",Toast.LENGTH_SHORT).show();
             }else{
             	// mManager is null
             }

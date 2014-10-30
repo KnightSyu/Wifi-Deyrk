@@ -117,9 +117,9 @@ public class PushMain extends ListFragment {
 			
 			//從cursor裡拿資料出來放到畫面上
 			
-			TextView title =(TextView)view.findViewById(R.id.title_ad);
-			TextView time = (TextView)view.findViewById(R.id.time);
-			TextView kind = (TextView)view.findViewById(R.id.kind);
+			TextView title =(TextView)view.findViewById(R.id.title_ad_push);
+			TextView time = (TextView)view.findViewById(R.id.time_push);
+			TextView kind = (TextView)view.findViewById(R.id.kind_push);
 			//ImageView image = (ImageView)view.findViewById(R.id.image_ad);
 			
 			title.setText(cursor.getString(
@@ -139,7 +139,7 @@ public class PushMain extends ListFragment {
 		public View newView(Context context, Cursor cursor, ViewGroup parent) {
 			
 			LayoutInflater inflater = LayoutInflater.from(context);
-			View v =inflater.inflate(R.layout.listview_receive_collection,null);
+			View v =inflater.inflate(R.layout.listview_push,null);
 			//設定ListView樣式
 			bindView(v,context,cursor);
 			

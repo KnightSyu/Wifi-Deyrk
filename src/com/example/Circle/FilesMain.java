@@ -1,18 +1,21 @@
 package com.example.Circle;
 
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.example.Circle.R;
 import com.example.Circle.CollectionMain.ListCursorAdapter;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothClass.Device;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -29,6 +32,8 @@ import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
+import android.net.wifi.p2p.nsd.WifiP2pServiceInfo;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -49,7 +54,6 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 	
 	View rootView;
 	
-	
 	private WifiP2pManager mManager;
 	private Channel mChannel;
 	private WiFiDirectBroadcastReceiver mReceiver;
@@ -59,12 +63,17 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 	private WifiP2pDevice devices_info;
 	private int connectionCount = 0;
 	private boolean isConnected = false;
+	private boolean isConnecting = false;
 	private int PORT =8898;
 	private boolean btn_send = false;
 	IntentFilter mIntentFilter;
 	List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
 	TextView device_name;
 	List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
+	WifiP2pDevice device;
+	public static String IP_SERVER;
+	public static String localIP;
+	public static String clientIP;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,7 +91,6 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
         
         mManager = (WifiP2pManager) this.getActivity().getSystemService(Context.WIFI_P2P_SERVICE);
         mChannel = mManager.initialize(this.getActivity(), this.getActivity().getMainLooper(), null);
-        
         //初始化WiFiDirect
         
         discoverpeers();
@@ -188,18 +196,52 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     	avaliablePeersNumber =collection.size();
     	
     	this.peers.addAll(peers.getDeviceList());
-    	Toast.makeText(rootView.getContext(),"onPeersAvailable,共有: "+avaliablePeersNumber+"個使用者",Toast.LENGTH_SHORT).show();
+    	//Toast.makeText(rootView.getContext(),"onPeersAvailable,共有: "+avaliablePeersNumber+"個使用者",Toast.LENGTH_SHORT).show();
     	setAdapter(rootView);
+    	if(avaliablePeersNumber>0 && !isConnecting){
+    		
+    		for(int i=0; i<this.peers.size(); i++)
+        	{
+        		WifiP2pDevice device = this.peers.get(i);
+        		Toast.makeText(rootView.getContext(),"deviceAddress["+i+"]:"+device.deviceAddress,Toast.LENGTH_SHORT).show();
+        		if(device.deviceAddress.equals("9a:e7:9a:2b:23:75")){
+        			connectpeers(i);
+        			Toast.makeText(rootView.getContext(),"connectpeers(i)",Toast.LENGTH_SHORT).show();
+        		}
+        	}
+    	}
     }
     
+	@SuppressLint("NewApi")
 	public void connectpeers(int d_number) {
 		
-		final WifiP2pDevice device =  (WifiP2pDevice) peers.get(d_number);
+		device =  (WifiP2pDevice) peers.get(d_number);
 		devices_info = device;
+		
+		mManager.removeGroup(mChannel, null);
+		
+		HashMap<String, String> record = new HashMap<String, String>();
+
+		WifiP2pServiceInfo serviceInfo = WifiP2pDnsSdServiceInfo.newInstance("_hello", "_world._tcp", record);
+		
+		mManager.addLocalService(mChannel, serviceInfo, new WifiP2pManager.ActionListener() {
+			
+			@Override
+			public void onFailure(int reason) {
+			}
+			
+			@Override
+			public void onSuccess() {
+				//create group, making this device the owner of the group
+				mManager.createGroup(mChannel, null);
+			}
+		});
+		
 		WifiP2pConfig config = new WifiP2pConfig();
 		config.deviceAddress = device.deviceAddress;
 		config.wps.setup = WpsInfo.PBC;
-		config.groupOwnerIntent = 0;  //確認被連的一定是GO(Group Owner)
+		//config.groupOwnerIntent = 15;  //確認被連的一定是GO(Group Owner)
+		
 		mManager.connect(mChannel, config, new ActionListener(){
 
 			@Override
@@ -239,12 +281,40 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
 		
 		isConnected = true;
 		connectedInfo = info;
-		String connectedInfos = connectedInfo.groupOwnerAddress.getHostAddress();
-		//Toast.makeText(getActivity(), "info:"+connectedInfo, Toast.LENGTH_SHORT).show();
+		String connectedInfos="";
+		boolean isOwnerInfo = info.isGroupOwner;
+        boolean isFormedInfo = info.groupFormed;
+        
+        localIP = Utils.getIPAddress(true);
+        IP_SERVER = info.groupOwnerAddress.getHostAddress();
+        /*
+        String client_mac_fixed = new String(device.deviceAddress).replace("99", "19");
+        clientIP = Utils.getMACAddress(client_mac_fixed);
+        */
+        /*
+		if(clientIP.equals(IP_SERVER)){
+			clientIP = device.deviceAddress;
+			connectedInfos = clientIP;
+		}
+		else{
+			connectedInfos = IP_SERVER;
+		}
+		*/
+		//connectedInfos = info.groupOwnerAddress.getHostAddress();
+		//Toast.makeText(getActivity(), "info:"+connectedInfo, Toast.LENGTH_LONG).show();
 		
-		//Toast.makeText(getActivity(), "hostAddress:"+connectedInfos, Toast.LENGTH_SHORT).show();
+		if(info.groupFormed && info.isGroupOwner){
+		//	clientIP = device.deviceAddress;
+			connectedInfos = "192.168.1.108";
+			Toast.makeText(getActivity(), "我是組長，我目標傳給IP "+connectedInfos, Toast.LENGTH_LONG).show();
+		}else{
+			connectedInfos = IP_SERVER;
+			Toast.makeText(getActivity(), "我不是組長，我目標傳給IP "+connectedInfos, Toast.LENGTH_LONG).show();
+		}
 		
-		Toast.makeText(getActivity(), "OnConnectionAvaliable-running",Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), "connectedInfos: "+connectedInfos, Toast.LENGTH_LONG).show();
+		
+		//Toast.makeText(getActivity(), "OnConnectionAvaliable-running",Toast.LENGTH_SHORT).show();
 
 		
 
@@ -255,9 +325,6 @@ public class FilesMain extends ListFragment implements PeerListListener,Connecti
     	Map<String,Object> item = new HashMap<String,Object>();
         item = data.get(deviceNumber);
         
-        
-        boolean isOwnerInfo = info.isGroupOwner;
-        boolean isFormedInfo = info.groupFormed;
         args.putString("deviceName", (String) item.get("deviceName"));
         args.putString("connectedInfo",connectedInfos);  //抓connectionInfo到另一個fragment
         args.putBoolean("isOwnerInfo",isOwnerInfo);  //抓detailInfo到另一個fragment

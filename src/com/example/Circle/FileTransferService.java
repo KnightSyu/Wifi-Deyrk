@@ -1,7 +1,10 @@
 package com.example.Circle;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -10,22 +13,32 @@ import java.net.Socket;
 
 import android.app.IntentService;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.widget.Toast;
 
 public class FileTransferService extends IntentService {
 
-	private static final String TAG = "FileTransferService";  
-    private static final int SOCKET_TIMEOUT = 5000;  
+	private static final String TAG = "FileTransferService";
+    private static final int SOCKET_TIMEOUT = 5000;
     public static final String ACTION_SEND_FILE = "SEND_FILE";
     public static final String ACTION_RECEIVE_FILE = "REVEICE_FILE";
+    public static final String EXTRAS_FILE_PATH = "file_url";
+    public static final String EXTRAS_GROUP_OWNER_ADDRESS = "go_host";
+    public static final String EXTRAS_GROUP_OWNER_PORT = "go_port";
     public int count=0;
     private int requestCode =0;
     
     Handler mHandler;
+    private Socket socket;
+    Context context;
     
 	public FileTransferService() {
 		super("FileTransferService");
@@ -34,6 +47,51 @@ public class FileTransferService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		
+		context = getApplicationContext();
+		if (intent.getAction().equals(ACTION_SEND_FILE)){
+			try {
+				String fileUri = intent.getExtras().getString(EXTRAS_FILE_PATH);
+				String dataName = getRealPathFromURI(Uri.parse(fileUri));
+				String[] dataType = dataName.split("[.;\\s]+",2);
+				String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
+				int port = intent.getExtras().getInt(EXTRAS_GROUP_OWNER_PORT);
+				
+	        	socket = new Socket();
+	        	socket.bind(null);
+	        	socket.connect(new InetSocketAddress(host, port),SOCKET_TIMEOUT);
+	        	
+	        	if(dataType[1].equals("jpg")){
+	        		ContentResolver cr = context.getContentResolver();  //取得當前應用的 ContentResolver instence
+		        	DataOutputStream os = new DataOutputStream(socket.getOutputStream());  //接收水
+		        	ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		        	Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(Uri.parse(fileUri)));
+	        		bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+	        		byte[] byteArray = stream.toByteArray();
+	        		os.writeUTF(dataName);
+	        		os.writeInt(stream.size());
+		            os.write(byteArray);
+		            os.flush();
+	        	}
+	        	else{
+	        		DataOutputStream os = new DataOutputStream(socket.getOutputStream());
+	        		File f = new File(Uri.parse(fileUri).getPath());
+	        		os.writeUTF(dataName);
+	        		os.writeInt((int)f.length());
+	        		ContentResolver cr = context.getContentResolver();
+	        		InputStream is = cr.openInputStream(Uri.parse(fileUri));
+	        		copyFile(is, os);
+		            //os.writeBytes(is.toString());
+		            os.flush();
+	        	}
+	            
+	            socket.close();
+	            
+	        } catch (IOException e) {
+	        	
+	        }
+		}
+		
+		/*
 		count+=1;
 		Toast.makeText(getApplicationContext(), "有進入onHandleIntent！"+count+"次",Toast.LENGTH_SHORT).show();
 		if (intent.getAction().equals(ACTION_SEND_FILE)){ // 傳送資料
@@ -169,12 +227,12 @@ public class FileTransferService extends IntentService {
 				
 			}
 			
-		}
+		}*/
 		
 		
 
 	}
-	
+	/*
 	public static boolean copyFile(InputStream inputStream, OutputStream out){
 		byte buf[] = new byte[1024]; 
 		int length ;
@@ -192,6 +250,38 @@ public class FileTransferService extends IntentService {
 		}
 		
 			return true;
+	}*/
+	
+	private void copyFile(InputStream is, DataOutputStream dos) throws IOException {
+    	byte buf[] = new byte[1024];
+		int length;
+		
+		try{
+			while ((length = is.read(buf)) != -1) {
+                dos.write(buf, 0, length);
+            }
+			dos.close();
+			is.close();
+		}catch(Exception e){
+			
+		}
 	}
+	
+	public String getRealPathFromURI(Uri contentUri) {
+    	String fileName = "";
+    	ContentResolver cr = context.getContentResolver();
+    	String[] projection = {MediaStore.MediaColumns.DISPLAY_NAME};
+        Cursor metaCursor = cr.query(contentUri, projection, null, null, null);
+        if (metaCursor != null) {
+            try {
+                if (metaCursor.moveToFirst()) {
+                    fileName = metaCursor.getString(0);
+                }
+            } finally {
+                metaCursor.close();
+            }
+        }
+        return fileName;
+    }
 
 }

@@ -34,12 +34,16 @@ public class FilesSelect extends Fragment {
 	Button btnFileOther;
 	Button btnDisConnect;
 	String connectedInfo;
+	TextView progress;
 	boolean isOwnerInfo;
 	boolean isFormedInfo;
 	boolean isClickSend = false;
-	private int PORT =8898;
+	private int PORT1 =8898;
+	private int PORT2 =8899;
 	private int count=0;
 	private FileServerAsyncTask fsat;
+	private ServerSocket serverSocket = null;
+    private Socket client = null;
 	
 	public FilesSelect() {
     }
@@ -61,8 +65,14 @@ public class FilesSelect extends Fragment {
     	onClickListeners();
     	connected_device.setText(device_info);
     	
-    	fsat = new FileServerAsyncTask(this.getActivity());
-		fsat.execute(PORT+"");
+    	if(isOwnerInfo && isFormedInfo){
+    		fsat = new FileServerAsyncTask(this.getActivity(),progress);
+    		fsat.execute(PORT1+"");
+    	}
+    	else if(isFormedInfo){
+    		fsat = new FileServerAsyncTask(this.getActivity(),progress);
+    		fsat.execute(PORT2+"");
+    	}
     	
     	//transferUpdate();
     	
@@ -76,7 +86,7 @@ public class FilesSelect extends Fragment {
 			Context ctx_receive = (Context) getActivity();
     		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
 	        serviceIntent.setAction(FileTransferService.ACTION_RECEIVE_FILE);  
-	        serviceIntent.putExtra("port", PORT);
+	        serviceIntent.putExtra("port", PORT1);
 	        ctx_receive.startService(serviceIntent);
 	        Toast.makeText(getActivity(), "等待接收中...",Toast.LENGTH_LONG).show();
 		}else if(isFormedInfo && isClickSend){
@@ -103,6 +113,7 @@ public class FilesSelect extends Fragment {
     	btnFileVideo = (Button)rootView.findViewById(R.id.video);
     	btnFileOther = (Button)rootView.findViewById(R.id.other);
     	btnDisConnect = (Button)rootView.findViewById(R.id.disconnect);
+    	progress = (TextView)rootView.findViewById(R.id.Progress);
 	}
 	
 	public OnClickListener photo = new OnClickListener(){
@@ -137,9 +148,9 @@ public class FilesSelect extends Fragment {
 		public void onClick(View arg0) {
 			
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);  
-            intent.setType("files/*");  
+            intent.setType("*/*");  
             startActivityForResult(intent, 40); 
-			
+            
 		}
 		
 	};
@@ -148,7 +159,9 @@ public class FilesSelect extends Fragment {
 
 		@Override
 		public void onClick(View arg0) {
-			 transferUpdate();
+			//transferUpdate();
+			fsat = new FileServerAsyncTask(getActivity(), progress);
+			fsat.execute(PORT1+"");
 		}
 		
 	};
@@ -166,12 +179,26 @@ public class FilesSelect extends Fragment {
                 serviceIntent.putExtra("requestCode", requestCode);
                 Toast.makeText(this.getActivity(),"uri:"+uri.toString()+"/host:"+connectedInfo+"/port:"+PORT,Toast.LENGTH_LONG).show();
                 getActivity().startService(serviceIntent);*/
-        		if (fsat != null && (fsat.getStatus() == FileServerAsyncTask.Status.RUNNING)) {
-        			Toast.makeText(this.getActivity(),"fsat.cancel(true);",Toast.LENGTH_SHORT).show();
-        			fsat.cancel(true);
-    			}
         		Uri uri = data.getData();
-                new FileClientAsyncTask(this.getActivity(),(TextView)rootView.findViewById(R.id.Progress)).execute(uri.toString(),connectedInfo,PORT+"");
+        		/*
+        		if(isOwnerInfo && isFormedInfo){
+        			new FileClientAsyncTask(this.getActivity(),(TextView)rootView.findViewById(R.id.Progress)).execute(uri.toString(),connectedInfo,PORT2+"");
+            	}
+            	else{
+            		new FileClientAsyncTask(this.getActivity(),(TextView)rootView.findViewById(R.id.Progress)).execute(uri.toString(),connectedInfo,PORT1+"");
+            	}
+        		*/
+        		Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
+                serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
+                serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
+                serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS, connectedInfo);
+        		if(isOwnerInfo && isFormedInfo){
+        			serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, PORT2);
+        		}
+        		else if(isFormedInfo){
+                    serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, PORT1);
+        		}
+        		getActivity().startService(serviceIntent);
             }else if(requestCode== 30){
             	/*Context ctx_send = (Context) this.getActivity();
         		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
@@ -183,19 +210,44 @@ public class FilesSelect extends Fragment {
                 serviceIntent.putExtra("requestCode", requestCode);
                 //d_name2.setText("uri:"+uri.toString()+"/host:"+connectedInfo.groupOwnerAddress.getHostAddress()+"/port:"+PORT);
                 ctx_send.startService(serviceIntent);*/
-                Uri uri = data.getData();
-                new FileClientAsyncTask(this.getActivity(),(TextView)rootView.findViewById(R.id.Progress)).execute(uri.toString(),connectedInfo,PORT+"");
+            	Uri uri = data.getData();
+            	Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
+                serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
+                serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
+                serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS, connectedInfo);
+        		if(isOwnerInfo && isFormedInfo){
+        			serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, PORT2);
+        		}
+        		else if(isFormedInfo){
+                    serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, PORT1);
+        		}
+        		getActivity().startService(serviceIntent);
             }else if(requestCode== 40){
+            	/*
             	Context ctx_send = (Context) this.getActivity();
         		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
+                */
                 Uri uri = data.getData();  
-                serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
+                
+                /*serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
                 serviceIntent.putExtra("uri", uri.toString());  
                 serviceIntent.putExtra("host",connectedInfo);  
-                serviceIntent.putExtra("port", PORT);
+                serviceIntent.putExtra("port", PORT2);
                 serviceIntent.putExtra("requestCode", requestCode);
                 //d_name2.setText("uri:"+uri.toString()+"/host:"+connectedInfo.groupOwnerAddress.getHostAddress()+"/port:"+PORT);
                 ctx_send.startService(serviceIntent);
+                */
+                Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
+                serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
+                serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
+                serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS, connectedInfo);
+        		if(isOwnerInfo && isFormedInfo){
+        			serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, PORT2);
+        		}
+        		else if(isFormedInfo){
+                    serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, PORT1);
+        		}
+        		getActivity().startService(serviceIntent);
             }
         }
     }

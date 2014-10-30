@@ -64,12 +64,15 @@ public class CollectionMain extends ListFragment {
 			
 			TextView title =(TextView)view.findViewById(R.id.title_ad);
 			TextView time = (TextView)view.findViewById(R.id.time);
+			TextView kind = (TextView)view.findViewById(R.id.kind);
 			//ImageView image = (ImageView)view.findViewById(R.id.image_ad);
 			
 			title.setText(cursor.getString(
 							cursor.getColumnIndex(DB.KEY_TITLE)));
 			time.setText(cursor.getString(
 							cursor.getColumnIndex(DB.KEY_TIME)));
+			kind.setText(cursor.getString(
+					cursor.getColumnIndex(DB.KEY_KIND)));
 			
 			//byte[] bb = cursor.getBlob(cursor.getColumnIndex(DB.KEY_IMAGE));
 			//image.setImageBitmap(BitmapFactory.decodeByteArray(bb, 0, bb.length));
