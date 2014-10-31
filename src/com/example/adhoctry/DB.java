@@ -142,6 +142,22 @@ public class DB {
 		
 				
 	}
+	// +"and"+ KEY_MYLOVE + "=" + 1
+	public Cursor getlistlovead(Long receive_id){
+		
+		return db.query(DATABASE_TABLE,
+				new String[]{KEY_ROWID, KEY_TITLE, KEY_TIME,KEY_CONTEXT, KEY_IMAGE,KEY_MYLOVE,KEY_KIND},
+				KEY_ROWID + "=" + receive_id +" and "+ KEY_MYLOVE + "=" + 1,
+				null,
+				null,
+				null,
+				null
+				
+				);
+		
+				
+	}
+	
 
 	
 	

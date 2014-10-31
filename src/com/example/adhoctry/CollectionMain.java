@@ -1,16 +1,19 @@
 package com.example.adhoctry;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CollectionMain extends ListFragment {
     
@@ -95,7 +98,12 @@ public class CollectionMain extends ListFragment {
 	    
 	    FragmentTransaction trans = getFragmentManager().beginTransaction();
 	    //trans.addToBackStack("CollectionMain");
-        trans.replace(R.id.root_collection, new CollectionAD());
+	    Fragment fragment = new CollectionAD();
+        trans.replace(R.id.root_collection, fragment);
+        Bundle args = new Bundle();
+        args.putLong("section__collection_id", id);
+        Log.e("ID=",id+"");
+        fragment.setArguments(args);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
         //將root_collection(收藏區的底層容器)當前的fragment替換成CollectionAD

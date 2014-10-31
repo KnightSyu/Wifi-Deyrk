@@ -87,9 +87,12 @@ public class ReceiveAD extends Fragment {
         if(mCursor.getCount()==0){
         	pre_btn.setVisibility(View.INVISIBLE);
         }
+        /*mCursor = mDbHelper.getlistad(extras.getLong("section_id")-1);
+        if(mCursor.getCount()==0){
+        	next_btn.setVisibility(View.INVISIBLE);
+        }*/
         
         mCursor = mDbHelper.getlistad(extras.getLong("section_id" ));
-        //adid=extras.getLong("section_id" );
         adid=extras.getLong("section_id" );
         //Log.d("test","e04"+adid);
         
