@@ -1,6 +1,7 @@
 package com.example.Circle;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,8 +20,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
@@ -55,7 +60,7 @@ public class FileTransferService extends IntentService {
 				String[] dataType = dataName.split("[.;\\s]+",2);
 				String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
 				int port = intent.getExtras().getInt(EXTRAS_GROUP_OWNER_PORT);
-				
+				int size = 0;
 	        	socket = new Socket();
 	        	socket.bind(null);
 	        	socket.connect(new InetSocketAddress(host, port),SOCKET_TIMEOUT);
@@ -83,6 +88,19 @@ public class FileTransferService extends IntentService {
 		            //os.writeBytes(is.toString());
 		            os.flush();
 	        	}
+	        	
+	        	Bundle bundle = intent.getExtras();
+	            if (bundle != null) {
+	                Messenger messenger = (Messenger) bundle.get("messenger");
+	                Message msg = Message.obtain();
+	                Bundle sendData = new Bundle();
+	                sendData.putString("sended", "成功傳送文件！");
+	                msg.setData(sendData); //put the data here
+	                try {
+	                    messenger.send(msg);
+	                } catch (Exception e) {
+	                }
+	            }
 	            
 	            socket.close();
 	            
@@ -251,6 +269,14 @@ public class FileTransferService extends IntentService {
 		
 			return true;
 	}*/
+	
+	public static int safeLongToInt(long l) {
+	    if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+	        throw new IllegalArgumentException
+	            (l + " cannot be cast to int without changing its value.");
+	    }
+	    return (int) l;
+	}
 	
 	private void copyFile(InputStream is, DataOutputStream dos) throws IOException {
     	byte buf[] = new byte[1024];

@@ -10,6 +10,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
@@ -20,11 +21,10 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 
     private WifiP2pManager mManager;
     private Channel mChannel;
-    private FilesMain mActivity;
-    
+    private MainDeyrk mActivity;
 
     public WiFiDirectBroadcastReceiver(Channel channel,WifiP2pManager manager,
-    		FilesMain mActivity) {
+    		MainDeyrk mActivity) {
         super();
         this.mChannel = channel;
         this.mManager = manager;
@@ -59,18 +59,18 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             // Respond to new connection or disconnections
         	if(mManager != null){
-        		NetworkInfo networkInfo = (NetworkInfo) intent  
-                        .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+        		NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
         		
-        		    //假如連接成功,則呼叫ConnectionInfoListener()方法
-        			if(networkInfo.isConnected()){
-        				mManager.requestConnectionInfo(mChannel,  
-                                (ConnectionInfoListener) mActivity);
-        			}else{
-        				Toast.makeText(this.mActivity.getActivity(), "networkInfo.isConnected(): "+networkInfo.isConnected(),Toast.LENGTH_SHORT).show();
-        			}
+        		//假如連接成功,則呼叫ConnectionInfoListener()方法
+    			if(networkInfo.isConnected()){
+    				mManager.requestConnectionInfo(mChannel, (ConnectionInfoListener) mActivity);
+    			}
+    			else{
+    				Toast.makeText(this.mActivity, "沒有連線",Toast.LENGTH_SHORT).show();
+    				mManager.requestPeers(mChannel, (PeerListListener) mActivity);
+    			}
         	}else{
-        		Toast.makeText(this.mActivity.getActivity(), "manager==null",Toast.LENGTH_SHORT).show();
+        		Toast.makeText(this.mActivity, "manager==null",Toast.LENGTH_SHORT).show();
         	}
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             // Respond to this device's wifi state changing

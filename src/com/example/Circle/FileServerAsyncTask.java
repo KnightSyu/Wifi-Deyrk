@@ -54,20 +54,18 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
         	DataInputStream is = new DataInputStream(client.getInputStream());
         	String name = is.readUTF();
         	dataType = name.split("[.;\\s]+",2);
+            
         	int size = 0;
-        	
         	size = is.readInt();
-        	
         	byte[] buffer = new byte[size];
             int len = 0;
             while(len < size){
             	len += is.read(buffer, len, size-len);
             	publishProgress((int) ((len / (float) size) * 100), size);
             }
-            
-            
+        	
             if(dataType[1].equals("jpg")){
-                
+            	
             	Bitmap bitmap = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
             	f = new File(Environment.getExternalStorageDirectory() + "/"
                         + context.getPackageName() + "/" + name);
@@ -80,7 +78,7 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
             	copyFile2(bitmap, new FileOutputStream(f));
             }
             else{
-                
+            	
             	f = new File(Environment.getExternalStorageDirectory() + "/"
                         + context.getPackageName() + "/" + name);
                 File dirs = new File(f.getParent());
@@ -92,7 +90,6 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
             	FileOutputStream fos = new FileOutputStream(f);
             	copyFile(is, fos);
             	//fos.write(buffer);
-            	fos.close();
             }
         	/*
             final File f = new File(Environment.getExternalStorageDirectory() + "/"
@@ -139,6 +136,7 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
 			while ((length = is.read(buf)) != -1) {
                 fos.write(buf, 0, length);
             }
+			fos.flush();
 			fos.close();
 			is.close();
 		}catch(Exception e){
@@ -161,12 +159,12 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
     
 	@Override  
     protected void onProgressUpdate(Integer... progresses) {
-        statusText.setText("資料接收中，進度：" + progresses[0] + "%！檔案大小 "+df.format((float)(progresses[1]/(float)1048576))+" MB");
+		statusText.setText("資料接收中，進度：" + progresses[0] + "%！檔案大小 "+df.format((float)(progresses[1]/(float)1048576))+" MB");
     }
 	
     protected void onPostExecute(String result) {
         //Toast.makeText(context, "接收完成！"+result, Toast.LENGTH_SHORT).show();
-        Toast.makeText(context, "接收完成！result:"+result, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "接收完成！\nresult:"+result, Toast.LENGTH_SHORT).show();
         new FileServerAsyncTask(context, statusText).execute(PORT+"");
     }
 }

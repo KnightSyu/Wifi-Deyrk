@@ -1,11 +1,17 @@
 package com.example.Circle;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +21,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import com.example.Circle.R;
 
 public class PushMain extends ListFragment {
@@ -23,6 +32,7 @@ public class PushMain extends ListFragment {
     private Cursor mCursor; //放資料庫資料的容器
     private View rootView;
     private Button btn;
+    List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
     
     public PushMain() {
     }
@@ -82,8 +92,44 @@ public class PushMain extends ListFragment {
         
         mCursor = mDbHelper.getAll();
         //呼叫DB的getAll函式，取得資料放進mCursor(資料庫資料的容器)
+        /*
+        data.clear();
+    	
+    	//存陣列內容(連線的裝置名稱)
+    	for(int i=0; i<peers.size(); i++)
+    	{
+    		Map<String,Object> item = new HashMap<String,Object>();
+    		WifiP2pDevice device = peers.get(i);
+    		item.put("deviceName",device.deviceName);
+    		item.put("devicePosition",i);
+        	data.add(item);
+    	}*/
         
-        ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor);
+        ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor){
+        	
+        	@Override
+            public View getView (int position, View convertView, ViewGroup parent)
+            {
+        		View v = super.getView(position, convertView, parent);
+        		
+                //deviceNumber = position;  //收集device的編號
+        		
+                ToggleButton b=(ToggleButton)v.findViewById(R.id.toggleButton_push);
+                Map<String,Object> item = new HashMap<String,Object>();
+                item.put("Position",position);
+            	data.add(item);
+                item = data.get(position);
+                b.setTag(item.get("Position"));
+                b.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View arg0) {
+                        Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
+                    	//MainDeyrk.connectpeers((Integer) arg0.getTag());
+                    }
+                });
+                return v;
+            }
+        };
         //實作ListCursorAdapter接口(設定要在畫面上顯示的ListView樣式，傳入ListView所在的activity跟mCursor來設定)
         
         /*
@@ -151,7 +197,6 @@ public class PushMain extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 	    super.onListItemClick(l, v, position, id);
 	    
-
 	    FragmentTransaction trans = getFragmentManager().beginTransaction();  
 	    Fragment fragment = new PushCreateAD();
         trans.replace(R.id.root_push, fragment);
@@ -159,9 +204,7 @@ public class PushMain extends ListFragment {
         args.putLong("section_id", id);
         
         fragment.setArguments(args);
-
-	   
-
+        
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
         Log.d("test",""+id);

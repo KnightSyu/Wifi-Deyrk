@@ -22,8 +22,11 @@ public class FilesRoot extends Fragment {
 		 * When this container fragment is created, we fill it with our first
 		 * "real" fragment
 		 */
-		Fragment fm = new FilesMain();
-		fm.setArguments(getArguments());
+		Fragment fm = MainDeyrk.FM;
+		try{
+			fm.setArguments(getArguments());
+		}catch(Exception e){
+		}
 		//Ä~Äò¶Ç»¼bundle
 		transaction.replace(R.id.root_files, fm);
 

@@ -7,15 +7,25 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pInfo;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
+import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,9 +54,9 @@ public class FilesSelect extends Fragment {
 	private FileServerAsyncTask fsat;
 	private ServerSocket serverSocket = null;
     private Socket client = null;
-	
-	public FilesSelect() {
-    }
+    
+	public FilesSelect(){
+	}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,9 +67,17 @@ public class FilesSelect extends Fragment {
     	
     	Bundle bundle = this.getArguments();
     	String device_info = bundle.getString("deviceName");
-    	connectedInfo = bundle.getString("connectedInfo");
-    	isOwnerInfo = bundle.getBoolean("isOwnerInfo");
-    	isFormedInfo = bundle.getBoolean("isFormedInfo");
+		isOwnerInfo = MainDeyrk.isOwnerInfo;
+		isFormedInfo = MainDeyrk.isFormedInfo;
+		
+		if(isFormedInfo && isOwnerInfo){
+		//	clientIP = device.deviceAddress;
+			connectedInfo = "192.168.1.108";
+			Toast.makeText(this.getActivity(), "我是組長，我目標傳給IP "+connectedInfo, Toast.LENGTH_LONG).show();
+		}else if(isFormedInfo){
+			connectedInfo = MainDeyrk.IP_SERVER;
+			Toast.makeText(this.getActivity(), "我不是組長，我目標傳給IP "+connectedInfo, Toast.LENGTH_LONG).show();
+		}
     	
     	initialViews();
     	onClickListeners();
@@ -77,29 +95,27 @@ public class FilesSelect extends Fragment {
     	//transferUpdate();
     	
     	//Toast.makeText(getActivity(), "OnCreateView-running",Toast.LENGTH_LONG).show();
+    	/*
+    	final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+             public void run() {
+            	 if(isFormedInfo){
+            		 Toast.makeText(getActivity(), "handler run()",Toast.LENGTH_SHORT).show();
+            		 handler.postDelayed(this,5000);
+            	 }
+            	 else{
+            		 MainDeyrk.cancelConnect = true;
+            		 Fragment fragment = MainDeyrk.FM;
+            		 FragmentTransaction trans = getFragmentManager().beginTransaction();
+          	         trans.replace(R.id.root_files, fragment);
+          	         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+          	         trans.commit();
+            	 }
+             } 
+        }, 5000);*/
     	
     	return rootView;
     }
-
-	private void transferUpdate() {  //接收端這邊沒反應
-		if(isOwnerInfo && isFormedInfo){
-			Context ctx_receive = (Context) getActivity();
-    		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
-	        serviceIntent.setAction(FileTransferService.ACTION_RECEIVE_FILE);  
-	        serviceIntent.putExtra("port", PORT1);
-	        ctx_receive.startService(serviceIntent);
-	        Toast.makeText(getActivity(), "等待接收中...",Toast.LENGTH_LONG).show();
-		}else if(isFormedInfo && isClickSend){
-		/*	Context ctx_send = (Context) this.getActivity();
-    		Intent serviceIntent = new Intent(this.getActivity(),FileTransferService.class);
-	        serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);  
-	        serviceIntent.putExtra("port", PORT);
-	        ctx_send.startService(serviceIntent);
-	        Toast.makeText(getActivity(), "傳送接收中...",Toast.LENGTH_LONG).show();*/
-		}else{
-			Toast.makeText(getActivity(), "無法進入isOwnerInfo是["+isOwnerInfo+"],isFormedInfo是["+isFormedInfo+"]",Toast.LENGTH_LONG).show();
-		}
-	}
 
 	private void onClickListeners() {
 		btnFilePhoto.setOnClickListener(photo);
@@ -160,11 +176,24 @@ public class FilesSelect extends Fragment {
 		@Override
 		public void onClick(View arg0) {
 			//transferUpdate();
-			fsat = new FileServerAsyncTask(getActivity(), progress);
-			fsat.execute(PORT1+"");
+			MainDeyrk.cancelConnectNow();
+			changeToFilesMain();
+			/*
+			try{
+				MainDeyrk.FS.changeToFilesMain();
+			}catch(Exception e){
+			}*/
 		}
 		
 	};
+	
+	public void changeToFilesMain(){
+		Fragment fragment = MainDeyrk.FM;
+		FragmentTransaction trans = getFragmentManager().beginTransaction();
+	    trans.replace(R.id.root_files, fragment);
+	    trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+	    trans.commit();
+	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {  
         if(data!=null){
@@ -188,10 +217,18 @@ public class FilesSelect extends Fragment {
             		new FileClientAsyncTask(this.getActivity(),(TextView)rootView.findViewById(R.id.Progress)).execute(uri.toString(),connectedInfo,PORT1+"");
             	}
         		*/
+        		Handler handler = new Handler() {
+        		    @Override
+        		    public void handleMessage(Message msg) {
+        		    	Bundle reply = msg.getData();
+        		    	Toast.makeText(rootView.getContext(),reply.getString("sended"),Toast.LENGTH_SHORT).show();
+        		    }
+        		};
         		Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
                 serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
                 serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
                 serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS, connectedInfo);
+                serviceIntent.putExtra("messenger", new Messenger(handler));
         		if(isOwnerInfo && isFormedInfo){
         			serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, PORT2);
         		}
