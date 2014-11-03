@@ -1,16 +1,19 @@
 package com.example.Circle;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.Circle.R;
 
 public class CollectionMain extends ListFragment {
@@ -42,12 +45,13 @@ public class CollectionMain extends ListFragment {
         
         mCursor = mDbHelper.getMylove();
         //呼叫DB的getAll函式，取得資料放進mCursor(資料庫資料的容器)
-        
-        ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor);
-        //實作ListCursorAdapter接口(設定要在畫面上顯示的ListView樣式，傳入ListView所在的activity跟mCursor來設定)
-        
-        setListAdapter(cadapter);
-        //執行接口
+        if(mCursor.getCount()!=0){
+        	ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor);
+            //實作ListCursorAdapter接口(設定要在畫面上顯示的ListView樣式，傳入ListView所在的activity跟mCursor來設定)
+            
+            setListAdapter(cadapter);
+            //執行接口
+        }
 	}
     
     //ListCursorAdapter接口
@@ -99,7 +103,12 @@ public class CollectionMain extends ListFragment {
 	    
 	    FragmentTransaction trans = getFragmentManager().beginTransaction();
 	    //trans.addToBackStack("CollectionMain");
-        trans.replace(R.id.root_collection, new CollectionAD());
+	    Fragment fragment = new CollectionAD();
+        trans.replace(R.id.root_collection, fragment);
+        Bundle args = new Bundle();
+        args.putLong("section__collection_id", id);
+        Log.e("ID=",id+"");
+        fragment.setArguments(args);
         trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         trans.commit();
         //將root_collection(收藏區的底層容器)當前的fragment替換成CollectionAD

@@ -30,19 +30,19 @@ public class ReceiveMain extends ListFragment {
     	rootView = inflater.inflate(R.layout.fragment_receive_main, container, false);
     	//設定畫面所對應的XML檔
     	
-        setAdapter(rootView);
+        setAdapter();
         //更新畫面的ListView
     	
     	return rootView;
     }
     
 
-	private void setAdapter(View rootView) {
+	public void setAdapter() {
 		mDbHelper = new DB(this.getActivity());
         mDbHelper.open();
         //打開DB
         
-        mCursor = mDbHelper.getAll();
+        mCursor = mDbHelper.getAllReceive();
         //呼叫DB的getAll函式，取得資料放進mCursor(資料庫資料的容器)
         
         ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor);

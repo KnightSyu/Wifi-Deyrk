@@ -75,10 +75,28 @@ public class ReceiveAD extends Fragment {
 		mDbHelper = new DB(this.getActivity());
         mDbHelper.open();
         //¥´¶}DB
-        //Toast.makeText(this.getActivity(), "123456", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this.getActivity(), "d123456", Toast.LENGTH_LONG).show();
         Bundle extras = this.getArguments();
         
         mCursor = mDbHelper.getlistad(extras.getLong("section_id")+1);
+        //mCursor = mDbHelper.getAll();
+        //mCursor.moveToNext();
+        //mCursor.getPosition();
+        //mCursor.moveToFirst();
+        //Log.e("moveToFirst getPosition=",mCursor.getPosition()+"");
+        
+        //if(!mCursor.moveToNext()){
+        	//Log.e("moveToNext=",mCursor.moveToNext()+"");
+        	
+        	//next_btn.setVisibility(View.INVISIBLE);
+       // }
+       // Log.e("moveToNext KEY_TITLE=",mCursor.getString(
+		//		mCursor.getColumnIndex(DB.KEY_TITLE)));
+        /*
+        if(!mCursor.moveToPrevious()){
+        	//Log.e("moveToNext=",mCursor.moveToNext()+"");
+        	pre_btn.setVisibility(View.INVISIBLE);
+        }*/
         
         /*while(mCursor.getInt(mCursor.getColumnIndex(DB.KEY_MYLOVE))==1){
         	adid+=1;
@@ -88,9 +106,15 @@ public class ReceiveAD extends Fragment {
         if(mCursor.getCount()==0){
         	pre_btn.setVisibility(View.INVISIBLE);
         }
+       
+        
+        
+        /*mCursor = mDbHelper.getlistad(extras.getLong("section_id")-1);
+        if(mCursor.getCount()==0){
+        	next_btn.setVisibility(View.INVISIBLE);
+        }*/
         
         mCursor = mDbHelper.getlistad(extras.getLong("section_id" ));
-        //adid=extras.getLong("section_id" );
         adid=extras.getLong("section_id" );
         //Log.d("test","e04"+adid);
         

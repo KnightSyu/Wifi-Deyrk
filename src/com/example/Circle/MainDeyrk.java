@@ -1,5 +1,6 @@
 package com.example.Circle;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,9 +11,14 @@ import java.util.Map;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -27,6 +33,8 @@ import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.net.wifi.p2p.nsd.WifiP2pServiceInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -65,10 +73,13 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 	String clientIP;
 	static FilesMain FM = new FilesMain();
 	static FilesSelect FS = new FilesSelect();
+	static ReceiveMain RM = new ReceiveMain();
 	public static boolean isOwnerInfo;
 	public static boolean isFormedInfo;
 	static final Handler handler = new Handler();
 	static Runnable runnable;
+	DB mDbHelper = new DB(this);
+	private PushServerAsyncTask psat;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -352,11 +363,49 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     			WifiP2pDevice device = peers.get(i);
     			if(device.deviceAddress.equals("9a:e7:9a:2b:23:75")){
     				Toast.makeText(getApplicationContext(), "與商家連線中！",Toast.LENGTH_SHORT).show();
+    				//server
+    				psat = new PushServerAsyncTask(this);
+    				psat.execute();
     			}
     		}
         }
         else if(isFormedInfo){
         	Toast.makeText(getApplicationContext(), "我是商家！",Toast.LENGTH_SHORT).show();
+        	//client
+    	    
+            Cursor cursor;
+            mDbHelper.open();
+            
+            cursor = mDbHelper.getAll();
+            
+            if(cursor != null){
+            	cursor.moveToFirst();
+            }
+        	
+            byte[] img = cursor.getBlob(cursor.getColumnIndex(DB.KEY_IMAGE));
+            String title = cursor.getString(cursor.getColumnIndex(DB.KEY_TITLE));
+            String context_ = cursor.getString(cursor.getColumnIndex(DB.KEY_CONTEXT));
+            String kind = cursor.getString(cursor.getColumnIndex(DB.KEY_KIND));
+            
+            Handler handler = new Handler() {
+    		    @Override
+    		    public void handleMessage(Message msg) {
+    		    	Bundle reply = msg.getData();
+    		    	Toast.makeText(getApplicationContext(),reply.getString("sended"),Toast.LENGTH_SHORT).show();
+    		    }
+    		};
+        	
+        	Intent serviceIntent = new Intent(this, PushClientService.class);
+            serviceIntent.setAction(PushClientService.ACTION_SEND_FILE);
+            
+            serviceIntent.putExtra(PushClientService.EXTRAS_TITLE, title);
+            serviceIntent.putExtra(PushClientService.EXTRAS_CONTEXT, context_);
+            serviceIntent.putExtra(PushClientService.EXTRAS_KIND, kind);
+            serviceIntent.putExtra(PushClientService.EXTRAS_IMAGE_SIZE, img.length);
+            serviceIntent.putExtra(PushClientService.EXTRAS_IMAGE_BYTEARRAY, img);
+            serviceIntent.putExtra(PushClientService.EXTRAS_GROUP_OWNER_ADDRESS, IP_SERVER);
+            serviceIntent.putExtra("messenger", new Messenger(handler));
+    		startService(serviceIntent);
         }
         
         /*
@@ -379,12 +428,12 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 
 		//要做的事...要如何從被連接的狀態抓到device的資訊
 		//Toast.makeText(getActivity(), "組長:"+info.isGroupOwner, Toast.LENGTH_SHORT).show();
-        
+        /*
         try{
         	FM.changeToSelect();
     	}catch(Exception e){
     		
-    	}
+    	}*/
 	}
     
     @SuppressLint("NewApi")
@@ -449,4 +498,5 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 		});
 		
 	}
+    
 }

@@ -111,10 +111,21 @@ public class PushCreateAD extends Fragment {
     		mDbHelper = new DB(getActivity());
             mDbHelper.open();
             if(adid==0){
-            mDbHelper.create(push_title.getText().toString(),push_context.getText().toString(), bitmap,kind);
+            	if(bitmap==null){
+            		Log.e("bitmap=","null");
+            		mDbHelper.createPush(push_title.getText().toString(),push_context.getText().toString(), null,kind);
+            	}else{
+            		Log.e("bitmap=","true");
+            		mDbHelper.createPush(push_title.getText().toString(),push_context.getText().toString(), bitmap,kind);
+            	}
             //呼叫create傳入參數給DB來儲存一筆資料
             }else{
-            mDbHelper.update(adid,push_title.getText().toString(),push_context.getText().toString(), bitmap,kind);	
+            	if(bitmap==null){
+            		mDbHelper.update(adid,push_title.getText().toString(),push_context.getText().toString(), bitmap,kind);	
+            	}else{
+            		mDbHelper.update(adid,push_title.getText().toString(),push_context.getText().toString(), bitmap,kind);	
+            	}
+            
             }
             	
             

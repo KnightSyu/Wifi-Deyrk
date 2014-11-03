@@ -18,7 +18,7 @@ public class ReceiveRoot extends Fragment {
 		//設定碎片容器
 		
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		Fragment fm = new ReceiveMain();
+		Fragment fm = MainDeyrk.RM;
 		fm.setArguments(getArguments());
 		//繼續傳遞bundle
 		transaction.replace(R.id.root_receice, fm);
