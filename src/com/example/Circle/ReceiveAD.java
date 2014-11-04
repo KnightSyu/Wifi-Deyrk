@@ -78,7 +78,7 @@ public class ReceiveAD extends Fragment {
         //Toast.makeText(this.getActivity(), "d123456", Toast.LENGTH_LONG).show();
         Bundle extras = this.getArguments();
         
-        mCursor = mDbHelper.getlistad(extras.getLong("section_id")+1);
+        mCursor = mDbHelper.getlistad_receive(extras.getLong("section_id")+1);
         //mCursor = mDbHelper.getAll();
         //mCursor.moveToNext();
         //mCursor.getPosition();
@@ -114,7 +114,7 @@ public class ReceiveAD extends Fragment {
         	next_btn.setVisibility(View.INVISIBLE);
         }*/
         
-        mCursor = mDbHelper.getlistad(extras.getLong("section_id" ));
+        mCursor = mDbHelper.getlistad_receive(extras.getLong("section_id" ));
         adid=extras.getLong("section_id" );
         //Log.d("test","e04"+adid);
         
@@ -146,7 +146,7 @@ public class ReceiveAD extends Fragment {
 	        //mDbHelper.open();
 			pre_btn.setVisibility(View.VISIBLE);
 			adid-=1;
-			mCursor = mDbHelper.getlistad(adid);
+			mCursor = mDbHelper.getlistad_receive(adid);
 	        //呼叫DB的getAll函式，取得資料放進mCursor(資料庫資料的容器)
 	        if(mCursor != null){
 	        	mCursor.moveToFirst();
@@ -183,12 +183,12 @@ public class ReceiveAD extends Fragment {
 	        //mDbHelper.open();
 			next_btn.setVisibility(View.VISIBLE);
 			adid+=1;
-			mCursor = mDbHelper.getlistad(adid+1);
+			mCursor = mDbHelper.getlistad_receive(adid+1);
 		        
 		        if(mCursor.getCount()==0){
 		        	pre_btn.setVisibility(View.INVISIBLE);
 		    }
-			mCursor = mDbHelper.getlistad(adid);
+			mCursor = mDbHelper.getlistad_receive(adid);
 	        //呼叫DB的getAll函式，取得資料放進mCursor(資料庫資料的容器)
 	        if(mCursor != null){
 	        	mCursor.moveToFirst();

@@ -62,7 +62,7 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 	private int connectionCount = 0;
 	private boolean isConnected = false;
 	public static boolean cancelConnect = false;
-	private int PORT =8898;
+	private int PORT8888 =8888;
 	private boolean btn_send = false;
 	public static List<WifiP2pDevice> peers = new ArrayList<WifiP2pDevice>();
 	public static List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
@@ -310,6 +310,7 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     	
     	MainDeyrk.peers.addAll(peers.getDeviceList());
     	//Toast.makeText(rootView.getContext(),"onPeersAvailable,共有: "+avaliablePeersNumber+"個使用者",Toast.LENGTH_SHORT).show();
+    	
     	try{
     		FM.setAdapter();
     	}catch(Exception e){
@@ -365,7 +366,7 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     				Toast.makeText(getApplicationContext(), "與商家連線中！",Toast.LENGTH_SHORT).show();
     				//server
     				psat = new PushServerAsyncTask(this);
-    				psat.execute();
+    				psat.execute(PORT8888+"");
     			}
     		}
         }
@@ -396,7 +397,6 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     		};
         	
         	Intent serviceIntent = new Intent(this, PushClientService.class);
-            serviceIntent.setAction(PushClientService.ACTION_SEND_FILE);
             
             serviceIntent.putExtra(PushClientService.EXTRAS_TITLE, title);
             serviceIntent.putExtra(PushClientService.EXTRAS_CONTEXT, context_);

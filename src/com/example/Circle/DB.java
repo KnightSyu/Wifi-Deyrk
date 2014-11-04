@@ -138,7 +138,7 @@ public class DB {
 		//取得DATABASE_TABLE_RECEIVE的所有欄位資料並以KEY_TIME遞減排序
 		return db.query(DATABASE_TABLE_RECEIVE,
 				new String[]{KEY_ROWID, KEY_TITLE, KEY_TIME,KEY_CONTEXT, KEY_IMAGE,KEY_MYLOVE,KEY_KIND},
-				KEY_MYLOVE +"="+ 0,
+				null,
 				null,
 				null,
 				null,
@@ -155,7 +155,7 @@ public class DB {
 		
 	}
 	//取得DATABASE_TABLE_RECEIVE的指定ID一筆資料
-	public Cursor getlistad(Long receive_id){
+	public Cursor getlistad_push(Long receive_id){
 		
 		return db.query(DATABASE_TABLE2_PUSH,
 				new String[]{KEY_ROWID, KEY_TITLE, KEY_TIME,KEY_CONTEXT, KEY_IMAGE,KEY_MYLOVE,KEY_KIND},
@@ -169,6 +169,22 @@ public class DB {
 		
 				
 	}
+	
+	public Cursor getlistad_receive(Long receive_id){
+		
+		return db.query(DATABASE_TABLE_RECEIVE,
+				new String[]{KEY_ROWID, KEY_TITLE, KEY_TIME,KEY_CONTEXT, KEY_IMAGE,KEY_MYLOVE,KEY_KIND},
+				KEY_ROWID + "=" + receive_id,
+				null,
+				null,
+				null,
+				null
+				
+				);
+		
+				
+	}
+	
 	// +"and"+ KEY_MYLOVE + "=" + 1
 	public Cursor getlistlovead(Long receive_id){
 		

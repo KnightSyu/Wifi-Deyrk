@@ -35,6 +35,7 @@
             </intent-filter>
         </activity>
         <service android:enabled="true" android:name="com.example.Circle.FileTransferService"></service>
+        <service android:enabled="true" android:name="com.example.Circle.PushClientService"></service>
     </application>
 
 </manifest>

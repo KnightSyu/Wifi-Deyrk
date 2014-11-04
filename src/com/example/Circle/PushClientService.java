@@ -33,7 +33,6 @@ public class PushClientService extends IntentService {
 
 	private static final String TAG = "PushClientService";
     private static final int SOCKET_TIMEOUT = 5000;
-    public static final String ACTION_SEND_FILE = "SEND_FILE";
     
     public static final String EXTRAS_TITLE = "Title";
     public static final String EXTRAS_CONTEXT = "Context";
@@ -56,36 +55,34 @@ public class PushClientService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		
 		context = getApplicationContext();
-		if (intent.getAction().equals(ACTION_SEND_FILE)){
-			try {
-				String title = intent.getExtras().getString(EXTRAS_TITLE);
-	        	String context = intent.getExtras().getString(EXTRAS_CONTEXT);
-	        	String kind = intent.getExtras().getString(EXTRAS_KIND);
-	        	int size = intent.getExtras().getInt(EXTRAS_IMAGE_SIZE);
-	        	byte[] byteArray = intent.getExtras().getByteArray(EXTRAS_IMAGE_BYTEARRAY);
-	        	
-				String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
-				int port = 9999;
-	        	socket = new Socket();
-	        	socket.bind(null);
-	        	socket.connect(new InetSocketAddress(host, port),SOCKET_TIMEOUT);
-	        	
-	        	DataOutputStream os = new DataOutputStream(socket.getOutputStream());
-        		
-        		os.writeUTF(title);
-        		os.writeUTF(context);
-        		os.writeUTF(kind);
-        		os.writeInt(size);
-	            os.write(byteArray);
-	            os.flush();
-	            
-	            
-	            
-	            socket.close();
-	            
-	        } catch (IOException e) {
-	        	
-	        }
-		}
+		try {
+			String title = intent.getExtras().getString(EXTRAS_TITLE);
+        	String context = intent.getExtras().getString(EXTRAS_CONTEXT);
+        	String kind = intent.getExtras().getString(EXTRAS_KIND);
+        	int size = intent.getExtras().getInt(EXTRAS_IMAGE_SIZE);
+        	byte[] byteArray = intent.getExtras().getByteArray(EXTRAS_IMAGE_BYTEARRAY);
+        	
+			String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
+			int port = 9999;
+        	socket = new Socket();
+        	socket.bind(null);
+        	socket.connect(new InetSocketAddress(host, port),SOCKET_TIMEOUT);
+        	
+        	DataOutputStream os = new DataOutputStream(socket.getOutputStream());
+    		
+    		os.writeUTF(title);
+    		os.writeUTF(context);
+    		os.writeUTF(kind);
+    		os.writeInt(size);
+            os.write(byteArray);
+            os.flush();
+            os.close();
+            
+            
+            socket.close();
+            
+        } catch (IOException e) {
+        	
+        }
 	}
 }

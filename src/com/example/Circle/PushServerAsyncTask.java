@@ -31,7 +31,7 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
     private Context context;
     private ServerSocket serverSocket = null;
     private Socket client = null;
-    private int PORT = 9999;
+    private int PORT;
     String title = "";
 	String context_save = "";
 	String kind = "";
@@ -45,10 +45,13 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
     	if(isCancelled()) return null;
     	
         try {
-        	publishProgress();
+        	PORT = Integer.parseInt(params[0]);
         	serverSocket = new ServerSocket(PORT);
         	client = serverSocket.accept();
+        	publishProgress();
+        	
         	DataInputStream is = new DataInputStream(client.getInputStream());
+        	
         	title = is.readUTF();
         	context_save = is.readUTF();
         	kind = is.readUTF();
@@ -61,6 +64,8 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
             	len += is.read(buffer, len, size-len);
             	//publishProgress((int) ((len / (float) size) * 100), size);
             }
+            
+            is.close();
             
             client.close();
             serverSocket.close();
@@ -79,7 +84,7 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
 	
     protected void onPostExecute(String result) {
         //Toast.makeText(context, "接收完成！"+result, Toast.LENGTH_SHORT).show();
-    	
+    	/*
     	DB mDbHelper = new DB(context);
         mDbHelper.open();
         
@@ -91,7 +96,7 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
         	MainDeyrk.RM.setAdapter();
     	}catch(Exception e){
     		
-    	}
+    	}*/
     	
         Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
         new PushServerAsyncTask(context).execute(PORT+"");

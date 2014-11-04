@@ -83,7 +83,7 @@ public class PushCreateAD extends Fragment {
     	 mDbHelper = new DB(this.getActivity());
          mDbHelper.open();
          //Bundle extras = this.getArguments();
-         mCursor = mDbHelper.getlistad(adid);
+         mCursor = mDbHelper.getlistad_push(adid);
          if(mCursor != null){
          	mCursor.moveToFirst();
          }
@@ -92,9 +92,9 @@ public class PushCreateAD extends Fragment {
 						mCursor.getColumnIndex(DB.KEY_TITLE)));
          push_context.setText(mCursor.getString(
 				mCursor.getColumnIndex(DB.KEY_CONTEXT)));
-         //spinner.setSelection(mCursor.getInt(mCursor.getColumnIndex(DB.KEY_KIND)));
-         //byte[] bb = mCursor.getBlob(mCursor.getColumnIndex(DB.KEY_IMAGE));
-         //imageView.setImageBitmap(BitmapFactory.decodeByteArray(bb, 0, bb.length));
+         spinner.setSelection(mCursor.getInt(mCursor.getColumnIndex(DB.KEY_KIND)));
+         byte[] bb = mCursor.getBlob(mCursor.getColumnIndex(DB.KEY_IMAGE));
+         imageView.setImageBitmap(BitmapFactory.decodeByteArray(bb, 0, bb.length));
     	 
      }
     
@@ -121,7 +121,7 @@ public class PushCreateAD extends Fragment {
             //呼叫create傳入參數給DB來儲存一筆資料
             }else{
             	if(bitmap==null){
-            		mDbHelper.update(adid,push_title.getText().toString(),push_context.getText().toString(), bitmap,kind);	
+            		mDbHelper.update(adid,push_title.getText().toString(),push_context.getText().toString(), null,kind);	
             	}else{
             		mDbHelper.update(adid,push_title.getText().toString(),push_context.getText().toString(), bitmap,kind);	
             	}

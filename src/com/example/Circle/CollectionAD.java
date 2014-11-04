@@ -63,7 +63,7 @@ public class CollectionAD extends Fragment {
         
         do
         {
-        	mCursor = mDbHelper.getlistad(extras.getLong("section__collection_id")+x);
+        	mCursor = mDbHelper.getlistad_receive(extras.getLong("section__collection_id")+x);
         		Log.e("getCount()==",mCursor.getCount()+"");
         		Log.e("pre次數",x+"");
         		if(mCursor != null){
@@ -82,7 +82,7 @@ public class CollectionAD extends Fragment {
         }while(true);
         do
         {
-        	mCursor = mDbHelper.getlistad(extras.getLong("section__collection_id")-y);
+        	mCursor = mDbHelper.getlistad_receive(extras.getLong("section__collection_id")-y);
         		Log.e("next次數",x+"");
         		Log.e("next_getCount()==",mCursor.getCount()+"");
         		if(mCursor != null){
@@ -124,7 +124,7 @@ public class CollectionAD extends Fragment {
 			int y=1;
 			do
 	        {
-	        	mCursor = mDbHelper.getlistad(adid-y);
+	        	mCursor = mDbHelper.getlistad_receive(adid-y);
 	        		
 	        	if(mCursor != null){
 	    	        	mCursor.moveToFirst();
@@ -157,7 +157,7 @@ public class CollectionAD extends Fragment {
 	     			
 	     			do
 	     	        {
-	     	        	mCursor = mDbHelper.getlistad(adid-k);
+	     	        	mCursor = mDbHelper.getlistad_receive(adid-k);
 	     	        		
 	     	        	if(mCursor != null){
 	     	    	        	mCursor.moveToFirst();
@@ -191,7 +191,7 @@ public class CollectionAD extends Fragment {
 			int x=1;
 			do
 	        {
-	        	mCursor = mDbHelper.getlistad(adid+x);
+	        	mCursor = mDbHelper.getlistad_receive(adid+x);
 	        		
 	        	if(mCursor != null){
 	    	        	mCursor.moveToFirst();
@@ -225,7 +225,7 @@ public class CollectionAD extends Fragment {
 	     			
 	     			do
 	     	        {
-	     	        	mCursor = mDbHelper.getlistad(adid+k);
+	     	        	mCursor = mDbHelper.getlistad_receive(adid+k);
 	     	        		
 	     	        	if(mCursor != null){
 	     	    	        	mCursor.moveToFirst();
