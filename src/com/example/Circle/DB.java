@@ -290,14 +290,16 @@ public class DB {
 	public boolean update(long rowId,String titlerecord, String contextrecord, Bitmap imagerecord, String kindrecord){
 		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		if(imagerecord!=null){
 		imagerecord.compress(Bitmap.CompressFormat.JPEG, 100, bos);
 		//byte[] b = bos.toByteArray();
 		int options = 100;  
-        while ( (bos.toByteArray().length / 1024)>2000) {
-        	bos.reset();
-        	imagerecord.compress(Bitmap.CompressFormat.JPEG, options, bos);
-        	options -= 10;
-        }
+        	while ( (bos.toByteArray().length / 1024)>2000) {
+        		bos.reset();
+        		imagerecord.compress(Bitmap.CompressFormat.JPEG, options, bos);
+        		options -= 10;
+        	}
+		}
         //ByteArrayInputStream isBm = new ByteArrayInputStream(bos.toByteArray());
         //Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);
         //byte[] b = bos.toByteArray();
@@ -305,7 +307,11 @@ public class DB {
 		ContentValues args = new ContentValues();
 		args.put(KEY_TITLE,titlerecord);
 		args.put(KEY_CONTEXT, contextrecord);
-		args.put(KEY_IMAGE, bos.toByteArray());
+		if(imagerecord==null){
+			args.put(KEY_IMAGE, bos.toByteArray());
+		}else{
+			args.put(KEY_IMAGE, bos.toByteArray());
+		}
 		
 		args.put(KEY_KIND, kindrecord);
 		return db.update(DATABASE_TABLE2_PUSH, args, KEY_ROWID + "=" + rowId, null) > 0;

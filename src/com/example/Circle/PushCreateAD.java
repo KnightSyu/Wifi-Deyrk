@@ -67,6 +67,8 @@ public class PushCreateAD extends Fragment {
     	push_context = (EditText)rootView.findViewById(R.id.input_adtext);
     	//取得標題跟內文
     	
+    	imageView = (ImageView)rootView.findViewById(R.id.image_ad);
+    	
     	spinner = (Spinner)rootView.findViewById(R.id.spinner_kind);
     	kindList = new ArrayAdapter<String>(this.getActivity(),android.R.layout.simple_spinner_item, kind);
     	spinner.setAdapter(kindList);
@@ -82,6 +84,7 @@ public class PushCreateAD extends Fragment {
      private void  setAdapter(View rootView){
     	 mDbHelper = new DB(this.getActivity());
          mDbHelper.open();
+         int i=0,j=0;
          //Bundle extras = this.getArguments();
          mCursor = mDbHelper.getlistad_push(adid);
          if(mCursor != null){
@@ -92,7 +95,16 @@ public class PushCreateAD extends Fragment {
 						mCursor.getColumnIndex(DB.KEY_TITLE)));
          push_context.setText(mCursor.getString(
 				mCursor.getColumnIndex(DB.KEY_CONTEXT)));
-         spinner.setSelection(mCursor.getInt(mCursor.getColumnIndex(DB.KEY_KIND)));
+         while(!mCursor.getString(mCursor.getColumnIndex(DB.KEY_KIND)).equals(kind[i])){
+        	 
+        	 i+=1;
+        	 j=i;
+        	 //Log.e("j=",j+"");
+         }
+         //Log.e("kind=",kind[2]+"");
+         //Log.e("kindstring=",mCursor.getString(mCursor.getColumnIndex(DB.KEY_KIND))+"");
+         //mCursor.getInt(mCursor.getColumnIndex(DB.KEY_KIND
+         spinner.setSelection(j);
          byte[] bb = mCursor.getBlob(mCursor.getColumnIndex(DB.KEY_IMAGE));
          imageView.setImageBitmap(BitmapFactory.decodeByteArray(bb, 0, bb.length));
     	 
@@ -107,6 +119,7 @@ public class PushCreateAD extends Fragment {
     		
     		String kind = spinner.getSelectedItem().toString();
             //kind是所選的分類
+    		Log.e("spinnerkind=",kind+"");
     		
     		mDbHelper = new DB(getActivity());
             mDbHelper.open();
