@@ -41,6 +41,10 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
         this.context = context;
         this.statusText = (TextView) statusText;
     }
+    
+    public FileServerAsyncTask(Context context) {
+        this.context = context;
+    }
 
     protected String doInBackground(String... params) {
     	if(isCancelled()) return null;

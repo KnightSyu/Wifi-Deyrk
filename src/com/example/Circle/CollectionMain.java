@@ -8,9 +8,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnKeyListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,13 +34,13 @@ public class CollectionMain extends ListFragment {
         rootView = inflater.inflate(R.layout.fragment_collection_main, container, false);
         //設定畫面所對應的XML檔
         
-        setAdapter(rootView);
+        setAdapter();
         //更新畫面的ListView
         
     	return rootView;
     }
     
-    private void setAdapter(View rootView) {
+    public void setAdapter() {
     	mDbHelper = new DB(this.getActivity());
         mDbHelper.open();
         //打開DB
@@ -52,6 +54,28 @@ public class CollectionMain extends ListFragment {
             setListAdapter(cadapter);
             //執行接口
         }
+        
+        
+        
+        rootView.setFocusableInTouchMode(true);
+		rootView.requestFocus();
+
+		rootView.setOnKeyListener(new OnKeyListener() {
+		        @Override
+		        public boolean onKey(View v, int keyCode, KeyEvent event) {
+		                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
+		                    	
+		                    	
+		                    	
+		                    return true;
+		                    }
+		                }
+		                return false;
+		            }
+		        });
+		
 	}
     
     //ListCursorAdapter接口

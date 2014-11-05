@@ -114,7 +114,7 @@ public class PushMain extends ListFragment {
         		
                 //deviceNumber = position;  //收集device的編號
         		
-                ToggleButton b=(ToggleButton)v.findViewById(R.id.toggleButton_push);
+                final ToggleButton b=(ToggleButton)v.findViewById(R.id.toggleButton_push);
                 Map<String,Object> item = new HashMap<String,Object>();
                 item.put("Position",position);
             	data.add(item);
@@ -123,8 +123,14 @@ public class PushMain extends ListFragment {
                 b.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View arg0) {
-                        Toast.makeText(arg0.getContext().getApplicationContext(),""+arg0.getTag(),Toast.LENGTH_SHORT).show();
-                    	//MainDeyrk.connectpeers((Integer) arg0.getTag());
+                    	if(b.isChecked()){
+                    		MainDeyrk.pushAD_count+=1;
+                    		Toast.makeText(arg0.getContext().getApplicationContext(),"ischeck "+arg0.getTag(),Toast.LENGTH_SHORT).show();
+                    	}
+                    	else{
+                    		MainDeyrk.pushAD_count-=1;
+                    		Toast.makeText(arg0.getContext().getApplicationContext(),"NOTcheck "+arg0.getTag(),Toast.LENGTH_SHORT).show();
+                    	}
                     }
                 });
                 return v;

@@ -17,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -68,6 +69,28 @@ public class ReceiveAD extends Fragment {
 			next_btn.setVisibility(View.INVISIBLE);
 			
 		}
+		
+		rootView.setFocusableInTouchMode(true);
+		rootView.requestFocus();
+
+		rootView.setOnKeyListener(new OnKeyListener() {
+		        @Override
+		        public boolean onKey(View v, int keyCode, KeyEvent event) {
+		                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
+		                    	FragmentTransaction trans = getFragmentManager().beginTransaction();  
+		                        trans.replace(R.id.root_receice, new ReceiveMain());  
+		                        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		                        //trans.addToBackStack("PushMain");  
+		                        trans.commit();
+		                    	
+		                    return true;
+		                    }
+		                }
+		                return false;
+		            }
+		        });
     	
     	return rootView;
     }
@@ -228,20 +251,8 @@ public class ReceiveAD extends Fragment {
 		}
 		
 	};
-	//ªð¦^Áä¥Îªk
-	//@Override
-	/*public boolean onKeyDown(int KeyCode,KeyEvent event){
-		Log.e("string","back");
-		if(KeyCode == KeyEvent.KEYCODE_BACK){
-			
-			FragmentTransaction trans = getFragmentManager().beginTransaction();  
-	        trans.replace(R.id.root_receice, new ReceiveMain());  
-	        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-	        trans.commit();
-	        return true;
-		}
-		return false;
-	}*/
+
     
+	
 
 }

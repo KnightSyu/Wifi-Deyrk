@@ -39,9 +39,9 @@ public final class R {
         public static final int action_close=0x7f09004d;
         public static final int action_settings=0x7f09004c;
         public static final int ad_collection_context=0x7f090008;
+        public static final int ad_collection_delete=0x7f090003;
         public static final int ad_collection_image=0x7f090007;
         public static final int ad_collection_kind=0x7f090004;
-        public static final int ad_collection_mylove=0x7f090003;
         public static final int ad_collection_time=0x7f090002;
         public static final int ad_collection_title=0x7f090001;
         public static final int ad_receive_context=0x7f090030;

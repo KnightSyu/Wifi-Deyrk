@@ -40,6 +40,7 @@ public class PushClientService extends IntentService {
     public static final String EXTRAS_IMAGE_SIZE = "Img_Size";
     public static final String EXTRAS_IMAGE_BYTEARRAY = "Img_ByteArray";
     public static final String EXTRAS_GROUP_OWNER_ADDRESS = "go_host";
+    public static final String EXTRAS_PORT = "go_port";
     public int count=0;
     private int requestCode =0;
     
@@ -63,7 +64,7 @@ public class PushClientService extends IntentService {
         	byte[] byteArray = intent.getExtras().getByteArray(EXTRAS_IMAGE_BYTEARRAY);
         	
 			String host = intent.getExtras().getString(EXTRAS_GROUP_OWNER_ADDRESS);
-			int port = 9999;
+			int port = intent.getExtras().getInt(EXTRAS_PORT);
         	socket = new Socket();
         	socket.bind(null);
         	socket.connect(new InetSocketAddress(host, port),SOCKET_TIMEOUT);
@@ -80,6 +81,19 @@ public class PushClientService extends IntentService {
             
             
             socket.close();
+            
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                Messenger messenger = (Messenger) bundle.get("messenger");
+                Message msg = Message.obtain();
+                Bundle sendData = new Bundle();
+                sendData.putString("sended", "成功推播訊息！");
+                msg.setData(sendData); //put the data here
+                try {
+                    messenger.send(msg);
+                } catch (Exception e) {
+                }
+            }
             
         } catch (IOException e) {
         	

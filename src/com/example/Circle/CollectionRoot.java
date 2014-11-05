@@ -18,7 +18,7 @@ public class CollectionRoot extends Fragment {
 		//設定碎片容器
 
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		Fragment fm = new CollectionMain();
+		Fragment fm = MainDeyrk.CM;
 		fm.setArguments(getArguments());
 		//繼續傳遞bundle
 		transaction.replace(R.id.root_collection, fm);

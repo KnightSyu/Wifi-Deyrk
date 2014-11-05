@@ -188,6 +188,7 @@ public class FilesSelect extends Fragment {
 	};
 	
 	public void changeToFilesMain(){
+		fsat.cancel(true);
 		Fragment fragment = MainDeyrk.FM;
 		FragmentTransaction trans = getFragmentManager().beginTransaction();
 	    trans.replace(R.id.root_files, fragment);

@@ -62,11 +62,12 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         		NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
         		
         		//假如連接成功,則呼叫ConnectionInfoListener()方法
+        		mActivity.isConnected = networkInfo.isConnected();
     			if(networkInfo.isConnected()){
     				mManager.requestConnectionInfo(mChannel, (ConnectionInfoListener) mActivity);
     			}
     			else{
-    				Toast.makeText(this.mActivity, "沒有連線",Toast.LENGTH_SHORT).show();
+    				Toast.makeText(this.mActivity, "目前沒有連線",Toast.LENGTH_SHORT).show();
     				mManager.requestPeers(mChannel, (PeerListListener) mActivity);
     			}
         	}else{

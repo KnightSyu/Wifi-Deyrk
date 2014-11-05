@@ -54,13 +54,13 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     public Intent serviceIntent;
     public static WifiP2pManager mManager;
 	public static Channel mChannel;
-	private WiFiDirectBroadcastReceiver mReceiver;
-	private IntentFilter mIntentFilter = new IntentFilter();
+	private static WiFiDirectBroadcastReceiver mReceiver;
+	private static IntentFilter mIntentFilter = new IntentFilter();
 	public static int avaliablePeersNumber = 0;
 	private WifiP2pInfo connectedInfo;
 	private static WifiP2pDevice devices_info;
 	private int connectionCount = 0;
-	private boolean isConnected = false;
+	public boolean isConnected = false;
 	public static boolean cancelConnect = false;
 	private int PORT8888 =8888;
 	private boolean btn_send = false;
@@ -74,12 +74,18 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 	static FilesMain FM = new FilesMain();
 	static FilesSelect FS = new FilesSelect();
 	static ReceiveMain RM = new ReceiveMain();
+	static CollectionMain CM = new CollectionMain();
 	public static boolean isOwnerInfo;
 	public static boolean isFormedInfo;
 	static final Handler handler = new Handler();
-	static Runnable runnable;
+	static Runnable runnable_connect;
+	static Runnable runnable_push;
 	DB mDbHelper = new DB(this);
 	private PushServerAsyncTask psat;
+	int nowPage = 0;
+	public static int pushAD_count = 0;
+	private FileServerAsyncTask fsat;
+	private int PORT1 =8898;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +100,30 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         mIntentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         //定義action(用來傾聽動作)
-
-        mManager = (WifiP2pManager) this.getSystemService(Context.WIFI_P2P_SERVICE);
-        mChannel = mManager.initialize(this, this.getMainLooper(), null);
-        //初始化WiFiDirect
         
-        discoverpeers();
+        runnable_connect = new Runnable() {
+            public void run() {
+            	if(avaliablePeersNumber>0 && !isConnected){
+            		for(int i=0; i<peers.size(); i++)
+            		{
+            			WifiP2pDevice device = peers.get(i);
+            			if(device.deviceAddress.equals("9a:e7:9a:2b:23:75")){
+            				Toast.makeText(getApplicationContext(), "發出連線要求！",Toast.LENGTH_SHORT).show();
+            				connectpeers(i);
+            			}
+            		}
+            	}
+            	else{
+            		pushAndReceive();
+            	}
+            }
+        };
+        
+        runnable_push = new Runnable() {
+            public void run() {
+            	pushAndReceive();
+            }
+        };
         
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -111,13 +135,24 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         //設定ViewPager(頁面)
-        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.setOffscreenPageLimit(10);
         //保存每頁的狀態(刷來刷去不會跳回分頁首頁)
         
         //刷來刷去時切換目前頁籤的傾聽器
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+            	nowPage = position;
+            	if(nowPage==0){
+            		handler.post(MainDeyrk.runnable_connect);
+            	}
+            	else if(nowPage==3){
+            		try {
+						CM.setAdapter();
+					} catch (Exception e) {
+						
+					}
+            	}
                 actionBar.setSelectedNavigationItem(position);
             }
         });
@@ -130,31 +165,22 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
                             .setTabListener(this));
         }
         
-        runnable = new Runnable() {
-            public void run() {
-            	if(avaliablePeersNumber>0){
-            		for(int i=0; i<peers.size(); i++)
-            		{
-            			WifiP2pDevice device = peers.get(i);
-            			if(device.deviceAddress.equals("9a:e7:9a:2b:23:75")){
-            				Toast.makeText(getApplicationContext(), "發出連線要求！",Toast.LENGTH_SHORT).show();
-            				connectpeers(i);
-            			}
-            		}
-            	}else{
-            		handler.postDelayed(this,5000);
-            		//Toast.makeText(getApplicationContext(), "handler五秒後再執行！",Toast.LENGTH_SHORT).show();
-            	}
-            }
-        };
-        
-        handler.post(MainDeyrk.runnable);
+        handler.postDelayed(MainDeyrk.runnable_connect, 5000);
+    }
+    
+    public void initialize_WiFiP2PManager(){
+    	mManager = (WifiP2pManager) this.getSystemService(Context.WIFI_P2P_SERVICE);
+        mChannel = mManager.initialize(this, this.getMainLooper(), null);
+        //初始化WiFiDirect
     }
     
     /* register the broadcast receiver with the intent values to be matched */
     @Override
     protected void onResume() {
         super.onResume();
+        initialize_WiFiP2PManager();
+        
+        discoverpeers();
         mReceiver = new WiFiDirectBroadcastReceiver(mChannel, mManager, this);
         this.registerReceiver(mReceiver, mIntentFilter);
     }
@@ -162,7 +188,8 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     @Override
     protected void onPause() {
         this.unregisterReceiver(mReceiver);
-        handler.removeCallbacks(runnable);
+        handler.removeCallbacks(runnable_connect);
+        handler.removeCallbacks(runnable_push);
         super.onPause();
     }
     
@@ -271,7 +298,7 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 	public void onPageSelected(int arg0) {
 	}
 	
-	private void discoverpeers() {
+	private static void discoverpeers() {
 		mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
@@ -333,45 +360,21 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 		});
     }
     
-    @Override
-	public void onConnectionInfoAvailable(WifiP2pInfo info) {
-		
-		//Toast.makeText(getActivity(), "OnConnectionAvaliable-running",Toast.LENGTH_SHORT).show();
-		
-    	//stopPeerDiscovery();
-		/*
-		mManager.requestGroupInfo(mChannel,new WifiP2pManager.GroupInfoListener() {
-	        @Override
-	        public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
-	            Collection<WifiP2pDevice> peerList = wifiP2pGroup.getClientList();
-	            ArrayList<WifiP2pDevice> list = new ArrayList<WifiP2pDevice>(peerList);
-	            if(list.size()>0){
-	            	//組長才會知道有幾個裝置連上群組，list.size不包括組長
-	            }
-	        }
-	    });
-		*/
-		connectedInfo = info;
-		isOwnerInfo = info.isGroupOwner;
-		isFormedInfo = info.groupFormed;
-        
-        localIP = Utils.getIPAddress(true);
-        IP_SERVER = info.groupOwnerAddress.getHostAddress();
-        
-        if(isOwnerInfo && isFormedInfo){
+    public void pushAndReceive(){
+    	if(isOwnerInfo && isFormedInfo){
         	for(int i=0; i<peers.size(); i++)
     		{
     			WifiP2pDevice device = peers.get(i);
     			if(device.deviceAddress.equals("9a:e7:9a:2b:23:75")){
-    				Toast.makeText(getApplicationContext(), "與商家連線中！",Toast.LENGTH_SHORT).show();
+    				Toast.makeText(getApplicationContext(), "開始接收商家推播訊息！",Toast.LENGTH_SHORT).show();
     				//server
     				psat = new PushServerAsyncTask(this);
     				psat.execute(PORT8888+"");
     			}
     		}
         }
-        else if(isFormedInfo){
-        	Toast.makeText(getApplicationContext(), "我是商家！",Toast.LENGTH_SHORT).show();
+        else if(isFormedInfo && pushAD_count>0){
+        	Toast.makeText(getApplicationContext(), "我是商家！我推播！",Toast.LENGTH_SHORT).show();
         	//client
     	    
             Cursor cursor;
@@ -404,9 +407,61 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
             serviceIntent.putExtra(PushClientService.EXTRAS_IMAGE_SIZE, img.length);
             serviceIntent.putExtra(PushClientService.EXTRAS_IMAGE_BYTEARRAY, img);
             serviceIntent.putExtra(PushClientService.EXTRAS_GROUP_OWNER_ADDRESS, IP_SERVER);
+            serviceIntent.putExtra(PushClientService.EXTRAS_PORT, PORT8888);
             serviceIntent.putExtra("messenger", new Messenger(handler));
     		startService(serviceIntent);
+    		handler.postDelayed(MainDeyrk.runnable_push,5000);
         }
+    }
+    
+    @Override
+	public void onConnectionInfoAvailable(WifiP2pInfo info) {
+		
+		//Toast.makeText(getActivity(), "OnConnectionAvaliable-running",Toast.LENGTH_SHORT).show();
+		
+    	//stopPeerDiscovery();
+		/*
+		mManager.requestGroupInfo(mChannel,new WifiP2pManager.GroupInfoListener() {
+	        @Override
+	        public void onGroupInfoAvailable(WifiP2pGroup wifiP2pGroup) {
+	            Collection<WifiP2pDevice> peerList = wifiP2pGroup.getClientList();
+	            ArrayList<WifiP2pDevice> list = new ArrayList<WifiP2pDevice>(peerList);
+	            if(list.size()>0){
+	            	//組長才會知道有幾個裝置連上群組，list.size不包括組長
+	            }
+	        }
+	    });
+		*/
+		connectedInfo = info;
+		isOwnerInfo = info.isGroupOwner;
+		isFormedInfo = info.groupFormed;
+        
+        localIP = Utils.getIPAddress(true);
+        IP_SERVER = info.groupOwnerAddress.getHostAddress();
+        
+        if(nowPage==2){
+        	if(isOwnerInfo && isFormedInfo){
+        		try{
+        			psat.cancel(true);
+        			fsat = new FileServerAsyncTask(this);
+            		fsat.execute(PORT1+"");
+            		Toast.makeText(getApplicationContext(), "等待接收檔案！",Toast.LENGTH_SHORT).show();
+            	}catch(Exception e){
+            		
+            	}
+        	}
+        	else if(isFormedInfo){
+        		try{
+            		FM.changeToSelect();
+            	}catch(Exception e){
+            		
+            	}
+        	}
+        }
+        else{
+        	pushAndReceive();
+        }
+        
         
         /*
         String client_mac_fixed = new String(device.deviceAddress).replace("99", "19");
@@ -428,12 +483,6 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 
 		//要做的事...要如何從被連接的狀態抓到device的資訊
 		//Toast.makeText(getActivity(), "組長:"+info.isGroupOwner, Toast.LENGTH_SHORT).show();
-        /*
-        try{
-        	FM.changeToSelect();
-    	}catch(Exception e){
-    		
-    	}*/
 	}
     
     @SuppressLint("NewApi")
@@ -488,11 +537,13 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 		    	}
 				mManager.removeGroup(mChannel, null);
 				cancelConnectNow();
+				discoverpeers();
 			}
 
 			@Override
 			public void onSuccess() {
-				handler.removeCallbacks(MainDeyrk.runnable);
+				handler.removeCallbacks(MainDeyrk.runnable_connect);
+				handler.removeCallbacks(runnable_push);
 			}
 			
 		});

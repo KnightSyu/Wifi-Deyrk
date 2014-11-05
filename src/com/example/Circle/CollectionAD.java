@@ -1,15 +1,19 @@
 package com.example.Circle;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,6 +32,7 @@ public class CollectionAD extends Fragment {
 	private TextView adkind;
 	private ImageButton pre_btn;
 	private ImageButton next_btn;
+	private Button delete;
 	private Long adid;
 	
 	public CollectionAD() {
@@ -48,8 +53,32 @@ public class CollectionAD extends Fragment {
     	pre_btn.setOnClickListener(prebtn);
     	next_btn = (ImageButton) rootView.findViewById(R.id.imageButton_collection_next);
     	next_btn.setOnClickListener(nextbtn);
+    	delete = (Button) rootView.findViewById(R.id.ad_collection_delete);
+    	delete.setOnClickListener(de);
     	//Intent intent = getActivity().getIntent();
     	setAdapter(rootView);
+    	
+    	rootView.setFocusableInTouchMode(true);
+		rootView.requestFocus();
+
+		rootView.setOnKeyListener(new OnKeyListener() {
+		        @Override
+		        public boolean onKey(View v, int keyCode, KeyEvent event) {
+		                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
+		                    	FragmentTransaction trans = getFragmentManager().beginTransaction();  
+		                        trans.replace(R.id.root_collection, new CollectionMain());  
+		                        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		                        //trans.addToBackStack("PushMain");  
+		                        trans.commit();
+		                    	
+		                    return true;
+		                    }
+		                }
+		                return false;
+		            }
+		        });
     	
     	return rootView;
     }
@@ -116,7 +145,16 @@ public class CollectionAD extends Fragment {
         adkind.setText(mCursor.getString(
         		mCursor.getColumnIndex(DB.KEY_KIND)));
 
-        }
+    }
+	
+	private OnClickListener de = new OnClickListener(){
+		public void onClick(View v){
+			
+			//按下刪除的動作
+			
+		}
+	};
+	
 	private OnClickListener nextbtn = new OnClickListener(){
 		public void onClick(View v){
 		   //mDbHelper = new DB(this.getActivity());

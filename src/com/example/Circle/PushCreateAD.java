@@ -12,9 +12,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -79,6 +81,29 @@ public class PushCreateAD extends Fragment {
         adid=extras.getLong("section_id" );
     	setAdapter(rootView);
     	}
+    	
+    	rootView.setFocusableInTouchMode(true);
+		rootView.requestFocus();
+
+		rootView.setOnKeyListener(new OnKeyListener() {
+		        @Override
+		        public boolean onKey(View v, int keyCode, KeyEvent event) {
+		                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
+		                    	FragmentTransaction trans = getFragmentManager().beginTransaction();  
+		                        trans.replace(R.id.root_push, new PushMain());  
+		                        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		                        //trans.addToBackStack("PushMain");  
+		                        trans.commit();
+		                    	
+		                    return true;
+		                    }
+		                }
+		                return false;
+		            }
+		        });
+		
     	return rootView;
     }
      private void  setAdapter(View rootView){

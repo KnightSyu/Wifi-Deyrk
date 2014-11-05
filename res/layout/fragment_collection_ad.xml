@@ -42,16 +42,18 @@
             android:layout_weight="0.1"
             android:orientation="vertical" >
 
-            <CheckBox
-                android:id="@+id/ad_collection_mylove"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/ad_collection_delete"
+                android:layout_width="96dp"
                 android:layout_height="48dp"
-                android:text="收藏" />
+                android:layout_gravity="center_horizontal"
+                android:text="刪除" />
 
             <TextView
                 android:id="@+id/ad_collection_kind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:text="分類" />
 
         </LinearLayout>

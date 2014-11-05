@@ -45,10 +45,10 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
     	if(isCancelled()) return null;
     	
         try {
+        	//publishProgress();
         	PORT = Integer.parseInt(params[0]);
         	serverSocket = new ServerSocket(PORT);
         	client = serverSocket.accept();
-        	publishProgress();
         	
         	DataInputStream is = new DataInputStream(client.getInputStream());
         	
@@ -79,12 +79,12 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
 	@Override  
     protected void onProgressUpdate(Integer... progresses) {
 		//statusText.setText("資料接收中，進度：" + progresses[0] + "%！檔案大小 "+df.format((float)(progresses[1]/(float)1048576))+" MB");
-		Toast.makeText(context, "接收囉...", Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, "接收推播囉...", Toast.LENGTH_SHORT).show();
 	}
 	
     protected void onPostExecute(String result) {
         //Toast.makeText(context, "接收完成！"+result, Toast.LENGTH_SHORT).show();
-    	/*
+    	
     	DB mDbHelper = new DB(context);
         mDbHelper.open();
         
@@ -96,9 +96,12 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
         	MainDeyrk.RM.setAdapter();
     	}catch(Exception e){
     		
-    	}*/
+    	}
     	
         Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+        
+        MainDeyrk.cancelConnectNow();
+        
         new PushServerAsyncTask(context).execute(PORT+"");
     }
 }
