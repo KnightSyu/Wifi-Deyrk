@@ -13,9 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnKeyListener;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.example.Circle.R;
 
 public class CollectionMain extends ListFragment {
@@ -23,6 +27,8 @@ public class CollectionMain extends ListFragment {
 	private View rootView;
 	private DB mDbHelper; //實作DB類別
     private Cursor mCursor; //放資料庫資料的容器
+    private ListView kind;
+    private SlidingDrawer sd;
 
     public CollectionMain() {
     }
@@ -36,6 +42,18 @@ public class CollectionMain extends ListFragment {
         
         setAdapter();
         //更新畫面的ListView
+        
+        kind = (ListView) rootView.findViewById(R.id.content_collection);
+        sd = (SlidingDrawer) rootView.findViewById(R.id.slidingDrawer_collection);
+        kind.setOnItemClickListener(new OnItemClickListener(){
+        	
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Toast.makeText(view.getContext(), "onItemClick: "+parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
+				sd.animateClose();
+			}
+        });
         
     	return rootView;
     }

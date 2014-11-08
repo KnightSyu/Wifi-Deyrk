@@ -144,6 +144,17 @@ public class DB {
 				null,
 				KEY_TIME + " DESC");
 	}
+	public Cursor getVsContext(String s){
+		
+		//取得DATABASE_TABLE_RECEIVE的所有欄位資料並以KEY_TIME遞減排序
+		return db.query(DATABASE_TABLE_RECEIVE,
+				new String[]{KEY_ROWID, KEY_TITLE, KEY_TIME,KEY_CONTEXT, KEY_IMAGE,KEY_MYLOVE,KEY_KIND},
+				KEY_CONTEXT + "=" + "'"+s+"'",
+				null,
+				null,
+				null,
+				null);
+	}
 	public Cursor getMylove(){
 		return db.query(DATABASE_ViewCollection,
 				new String[]{KEY_ROWID, KEY_TITLE, KEY_TIME,KEY_CONTEXT, KEY_IMAGE,KEY_MYLOVE,KEY_KIND},
@@ -164,10 +175,7 @@ public class DB {
 				null,
 				null,
 				null
-				
 				);
-		
-				
 	}
 	
 	public Cursor getlistad_receive(Long receive_id){

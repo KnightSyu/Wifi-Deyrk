@@ -148,6 +148,7 @@ public class PushCreateAD extends Fragment {
     		
     		mDbHelper = new DB(getActivity());
             mDbHelper.open();
+            
             if(adid==0){
             	if(bitmap==null){
             		Log.e("bitmap=","null");
@@ -180,7 +181,7 @@ public class PushCreateAD extends Fragment {
     };
      
     
-    //取消按鈕的傾聽器
+    //刪除按鈕的傾聽器
       private OnClickListener cbtn = new OnClickListener(){
     	public void onClick(View v){
     		

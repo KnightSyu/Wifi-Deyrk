@@ -32,10 +32,13 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
     private ServerSocket serverSocket = null;
     private Socket client = null;
     private int PORT;
-    String title = "";
-	String context_save = "";
-	String kind = "";
-	byte[] buffer;
+    String[] title;
+	String[] context_save;
+	String[] kind;
+	int[] size;
+	byte[][] buffer;
+	DB mDbHelper;
+	int num = 0;
 
     public PushServerAsyncTask(Context context) {
         this.context = context;
@@ -45,6 +48,7 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
     	if(isCancelled()) return null;
     	
         try {
+        	
         	//publishProgress();
         	PORT = Integer.parseInt(params[0]);
         	serverSocket = new ServerSocket(PORT);
@@ -52,18 +56,26 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
         	
         	DataInputStream is = new DataInputStream(client.getInputStream());
         	
-        	title = is.readUTF();
-        	context_save = is.readUTF();
-        	kind = is.readUTF();
+        	num = is.readInt();
         	
-        	int size = 0;
-        	size = is.readInt();
-        	buffer = new byte[size];
-            int len = 0;
-            while(len < size){
-            	len += is.read(buffer, len, size-len);
-            	//publishProgress((int) ((len / (float) size) * 100), size);
-            }
+        	title = new String[num];
+        	context_save = new String[num];
+        	kind = new String[num];
+        	size = new int[num];
+        	buffer = new byte[num][];
+        	
+        	for(int i=0; i<num; i++){
+        		title[i] = is.readUTF();
+            	context_save[i] = is.readUTF();
+            	kind[i] = is.readUTF();
+            	size[i] = is.readInt();
+            	buffer[i] = new byte[size[i]];
+                int len = 0;
+                while(len < size[i]){
+                	len += is.read(buffer[i], len, size[i]-len);
+                	//publishProgress((int) ((len / (float) size) * 100), size);
+                }
+        	}
             
             is.close();
             
@@ -84,14 +96,21 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
 	
     protected void onPostExecute(String result) {
         //Toast.makeText(context, "接收完成！"+result, Toast.LENGTH_SHORT).show();
+        
+    	mDbHelper = new DB(context);
+    	mDbHelper.open();
+        Cursor c;
+        
+        for(int i=0; i<num; i++){
+        	Bitmap bitmap = BitmapFactory.decodeByteArray(buffer[i], 0, buffer[i].length);
+            
+            c = mDbHelper.getVsContext(context_save[i]);
+            
+            if(c.getCount()==0){
+            	mDbHelper.create(title[i], context_save[i], bitmap, kind[i]);
+            }
+        }
     	
-    	DB mDbHelper = new DB(context);
-        mDbHelper.open();
-        
-        Bitmap bitmap = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
-        
-        mDbHelper.create(title, context_save, bitmap, kind);
-        
         try{
         	MainDeyrk.RM.setAdapter();
     	}catch(Exception e){
@@ -99,8 +118,6 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
     	}
     	
         Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-        
-        MainDeyrk.cancelConnectNow();
         
         new PushServerAsyncTask(context).execute(PORT+"");
     }

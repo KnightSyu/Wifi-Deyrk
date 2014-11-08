@@ -128,7 +128,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_weight="0.25"
-                    android:text="取消" />
+                    android:text="刪除" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

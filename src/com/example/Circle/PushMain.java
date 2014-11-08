@@ -18,11 +18,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.Circle.R;
 
@@ -33,6 +36,8 @@ public class PushMain extends ListFragment {
     private View rootView;
     private Button btn;
     List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
+    private ListView kind;
+    private SlidingDrawer sd;
     
     public PushMain() {
     }
@@ -56,6 +61,18 @@ public class PushMain extends ListFragment {
     	
     	setAdapter(rootView);
     	//更新畫面的ListView
+    	
+    	kind = (ListView) rootView.findViewById(R.id.content_push);
+        sd = (SlidingDrawer) rootView.findViewById(R.id.slidingDrawer_push);
+        kind.setOnItemClickListener(new OnItemClickListener(){
+        	
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Toast.makeText(view.getContext(), "onItemClick: "+parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
+				sd.animateClose();
+			}
+        });
     	
     	return rootView;
     }

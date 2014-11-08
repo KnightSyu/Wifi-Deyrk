@@ -161,12 +161,10 @@ public class ReceiveAD extends Fragment {
 		
         //°õ¦æ±µ¤f
 		//mCursor.getColumnIndex(DB.KEY_TIME);
-        
 	}
 	private OnClickListener nextbtn = new OnClickListener(){
 		public void onClick(View v){
 		   //mDbHelper = new DB(this.getActivity());
-	        //mDbHelper.open();
 			pre_btn.setVisibility(View.VISIBLE);
 			adid-=1;
 			mCursor = mDbHelper.getlistad_receive(adid);
@@ -203,7 +201,6 @@ public class ReceiveAD extends Fragment {
 	private OnClickListener prebtn = new OnClickListener(){
 		public void onClick(View v){
 		   //mDbHelper = new DB(this.getActivity());
-	        //mDbHelper.open();
 			next_btn.setVisibility(View.VISIBLE);
 			adid+=1;
 			mCursor = mDbHelper.getlistad_receive(adid+1);
@@ -235,7 +232,6 @@ public class ReceiveAD extends Fragment {
 			
 			adkind.setText(mCursor.getString(
 					mCursor.getColumnIndex(DB.KEY_KIND)));
-			
 			
 		}
 	};

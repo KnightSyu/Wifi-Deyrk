@@ -145,6 +145,11 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
             	nowPage = position;
             	if(nowPage==0){
             		handler.post(MainDeyrk.runnable_connect);
+            		try {
+						RM.setAdapter();
+					} catch (Exception e) {
+						
+					}
             	}
             	else if(nowPage==3){
             		try {
@@ -374,22 +379,8 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     		}
         }
         else if(isFormedInfo && pushAD_count>0){
-        	Toast.makeText(getApplicationContext(), "我是商家！我推播！",Toast.LENGTH_SHORT).show();
+        	Toast.makeText(getApplicationContext(), "我是商家！",Toast.LENGTH_SHORT).show();
         	//client
-    	    
-            Cursor cursor;
-            mDbHelper.open();
-            
-            cursor = mDbHelper.getAll();
-            
-            if(cursor != null){
-            	cursor.moveToFirst();
-            }
-        	
-            byte[] img = cursor.getBlob(cursor.getColumnIndex(DB.KEY_IMAGE));
-            String title = cursor.getString(cursor.getColumnIndex(DB.KEY_TITLE));
-            String context_ = cursor.getString(cursor.getColumnIndex(DB.KEY_CONTEXT));
-            String kind = cursor.getString(cursor.getColumnIndex(DB.KEY_KIND));
             
             Handler handler = new Handler() {
     		    @Override
@@ -400,17 +391,18 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     		};
         	
         	Intent serviceIntent = new Intent(this, PushClientService.class);
-            
+            /*
             serviceIntent.putExtra(PushClientService.EXTRAS_TITLE, title);
             serviceIntent.putExtra(PushClientService.EXTRAS_CONTEXT, context_);
             serviceIntent.putExtra(PushClientService.EXTRAS_KIND, kind);
             serviceIntent.putExtra(PushClientService.EXTRAS_IMAGE_SIZE, img.length);
-            serviceIntent.putExtra(PushClientService.EXTRAS_IMAGE_BYTEARRAY, img);
+            serviceIntent.putExtra(PushClientService.EXTRAS_IMAGE_BYTEARRAY, img);*/
             serviceIntent.putExtra(PushClientService.EXTRAS_GROUP_OWNER_ADDRESS, IP_SERVER);
             serviceIntent.putExtra(PushClientService.EXTRAS_PORT, PORT8888);
             serviceIntent.putExtra("messenger", new Messenger(handler));
     		startService(serviceIntent);
-    		handler.postDelayed(MainDeyrk.runnable_push,5000);
+            
+    		//handler.postDelayed(MainDeyrk.runnable_push,5000);
         }
     }
     
@@ -535,8 +527,8 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 		    		reasonString ="未知的錯誤!";
 		    		break;
 		    	}
-				mManager.removeGroup(mChannel, null);
-				cancelConnectNow();
+				//mManager.removeGroup(mChannel, null);
+				//cancelConnectNow();
 				discoverpeers();
 			}
 

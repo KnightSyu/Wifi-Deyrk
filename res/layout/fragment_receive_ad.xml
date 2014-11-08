@@ -87,6 +87,8 @@
 
 	            <ImageView
 	                android:id="@+id/ad_receive_image"
+	                android:adjustViewBounds= "true"
+	                android:maxHeight="400dp"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
 	                android:layout_gravity="center_horizontal" />
