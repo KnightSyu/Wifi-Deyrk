@@ -48,7 +48,7 @@ public class PushClientService extends IntentService {
     private Socket socket;
     Context context;
     DB mDbHelper = new DB(this);
-    int num;
+    int num = 0;
     
 	public PushClientService() {
 		super("PushClientService");
@@ -65,9 +65,20 @@ public class PushClientService extends IntentService {
         do{
         	numCount = Integer.parseInt(numCount) + 1 + "";
         	cursor = mDbHelper.getlistad_push(Long.parseLong(numCount));
-        }while(cursor.getCount()!=0);
+        	if(cursor.getCount()==0){
+        		break;
+        	}
+        	else{
+        		if(cursor != null){
+        			cursor.moveToFirst();
+                	if(cursor.getInt(cursor.getColumnIndex(DB.KEY_MYLOVE))==1){
+                		num++;
+                	}
+        		}	
+            }
+        }while(true);
         
-    	num = Integer.parseInt(numCount)-1;
+        int totalnum = Integer.parseInt(numCount) - 1;
 		
     	if(num>0){
     		try {/*
@@ -92,23 +103,24 @@ public class PushClientService extends IntentService {
             	
             	os.writeInt(num);
             	
-            	for(int i=0; i<num; i++){
+            	for(int i=0; i<totalnum; i++){
             		cursor = mDbHelper.getlistad_push((long)(i+1));
                 	
                     if(cursor != null){
                     	cursor.moveToFirst();
                     }
-                    
-                    img = cursor.getBlob(cursor.getColumnIndex(DB.KEY_IMAGE));
-                    title = cursor.getString(cursor.getColumnIndex(DB.KEY_TITLE));
-                    context_ = cursor.getString(cursor.getColumnIndex(DB.KEY_CONTEXT));
-                    kind = cursor.getString(cursor.getColumnIndex(DB.KEY_KIND));
-                    
-                    os.writeUTF(title);
-            		os.writeUTF(context_);
-            		os.writeUTF(kind);
-            		os.writeInt(img.length);
-                    os.write(img);
+                    if(cursor.getInt(cursor.getColumnIndex(DB.KEY_MYLOVE))==1){
+                    	img = cursor.getBlob(cursor.getColumnIndex(DB.KEY_IMAGE));
+                        title = cursor.getString(cursor.getColumnIndex(DB.KEY_TITLE));
+                        context_ = cursor.getString(cursor.getColumnIndex(DB.KEY_CONTEXT));
+                        kind = cursor.getString(cursor.getColumnIndex(DB.KEY_KIND));
+                        
+                        os.writeUTF(title);
+                		os.writeUTF(context_);
+                		os.writeUTF(kind);
+                		os.writeInt(img.length);
+                        os.write(img);
+                    }
                 }
             	
                 os.flush();

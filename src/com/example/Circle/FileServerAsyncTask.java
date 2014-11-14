@@ -30,7 +30,7 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
     private Context context;
     private TextView statusText;
     private String dataName = "dataName";
-    private ServerSocket serverSocket = null;
+    ServerSocket serverSocket = null;
     private Socket client = null;
     private Boolean rb;
     private int PORT;
@@ -118,6 +118,9 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
         } catch (IOException e) {
             return e.getMessage();
         }
+        catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
     private void copyFile2(Bitmap bitmap, FileOutputStream fos) {
@@ -163,7 +166,9 @@ public class FileServerAsyncTask extends AsyncTask<String, Integer, String> {
     
 	@Override  
     protected void onProgressUpdate(Integer... progresses) {
-		statusText.setText("資料接收中，進度：" + progresses[0] + "%！檔案大小 "+df.format((float)(progresses[1]/(float)1048576))+" MB");
+		if(statusText!=null){
+			statusText.setText("資料接收中，進度：" + progresses[0] + "%！檔案大小 "+df.format((float)(progresses[1]/(float)1048576))+" MB");
+		}
     }
 	
     protected void onPostExecute(String result) {

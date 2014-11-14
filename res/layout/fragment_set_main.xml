@@ -54,7 +54,6 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:text="提示附近有推播訊息" />
-
     <Button
         android:id="@+id/tellous"
         android:layout_width="wrap_content"

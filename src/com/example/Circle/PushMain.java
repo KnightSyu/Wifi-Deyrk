@@ -38,6 +38,8 @@ public class PushMain extends ListFragment {
     List<Map<String, Object>> data = new ArrayList<Map<String,Object>>();
     private ListView kind;
     private SlidingDrawer sd;
+    ToggleButton b;
+    ListCursorAdapter cadapter;
     
     public PushMain() {
     }
@@ -59,7 +61,7 @@ public class PushMain extends ListFragment {
     	btn.setOnClickListener(mbtn);
     	//新增推播訊息的按鈕
     	
-    	setAdapter(rootView);
+    	setAdapter();
     	//更新畫面的ListView
     	
     	kind = (ListView) rootView.findViewById(R.id.content_push);
@@ -102,15 +104,16 @@ public class PushMain extends ListFragment {
 	    }
 	};
 	
-	private void setAdapter(View rootView) {
+	public void setAdapter() {
 		mDbHelper = new DB(this.getActivity());
         mDbHelper.open();
         //打開DB
         
         mCursor = mDbHelper.getAll();
+        
+        data.clear();
         //呼叫DB的getAll函式，取得資料放進mCursor(資料庫資料的容器)
         /*
-        data.clear();
     	
     	//存陣列內容(連線的裝置名稱)
     	for(int i=0; i<peers.size(); i++)
@@ -122,16 +125,14 @@ public class PushMain extends ListFragment {
         	data.add(item);
     	}*/
         
-        ListCursorAdapter cadapter = new ListCursorAdapter(this.getActivity(), mCursor){
+        cadapter = new ListCursorAdapter(this.getActivity(), mCursor){
         	
         	@Override
             public View getView (int position, View convertView, ViewGroup parent)
             {
         		View v = super.getView(position, convertView, parent);
-        		
+        		b=(ToggleButton)v.findViewById(R.id.toggleButton_push);
                 //deviceNumber = position;  //收集device的編號
-        		
-                final ToggleButton b=(ToggleButton)v.findViewById(R.id.toggleButton_push);
                 Map<String,Object> item = new HashMap<String,Object>();
                 item.put("Position",position);
             	data.add(item);
@@ -140,13 +141,16 @@ public class PushMain extends ListFragment {
                 b.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View arg0) {
+                    	ToggleButton b=(ToggleButton)arg0.findViewById(R.id.toggleButton_push);
+                    	String id = arg0.getTag().toString();
+                    	id = Integer.parseInt(id)+1+"";
                     	if(b.isChecked()){
-                    		MainDeyrk.pushAD_count+=1;
-                    		Toast.makeText(arg0.getContext().getApplicationContext(),"ischeck "+arg0.getTag(),Toast.LENGTH_SHORT).show();
+                    		mDbHelper.loveupdate_push(Long.parseLong(id),1);
+                    		Toast.makeText(arg0.getContext(), Long.parseLong(id)+"被設為true", Toast.LENGTH_SHORT).show();
                     	}
                     	else{
-                    		MainDeyrk.pushAD_count-=1;
-                    		Toast.makeText(arg0.getContext().getApplicationContext(),"NOTcheck "+arg0.getTag(),Toast.LENGTH_SHORT).show();
+                    		mDbHelper.loveupdate_push(Long.parseLong(id),0);
+                    		Toast.makeText(arg0.getContext(), Long.parseLong(id)+"被設為false", Toast.LENGTH_SHORT).show();
                     	}
                     }
                 });
@@ -185,19 +189,22 @@ public class PushMain extends ListFragment {
 		public void bindView(View view, Context context, Cursor cursor) {
 			
 			//從cursor裡拿資料出來放到畫面上
-			
 			TextView title =(TextView)view.findViewById(R.id.title_ad_push);
 			TextView time = (TextView)view.findViewById(R.id.time_push);
 			TextView kind = (TextView)view.findViewById(R.id.kind_push);
 			//ImageView image = (ImageView)view.findViewById(R.id.image_ad);
-			
+			ToggleButton b = (ToggleButton)view.findViewById(R.id.toggleButton_push);
 			title.setText(cursor.getString(
 							cursor.getColumnIndex(DB.KEY_TITLE)));
 			time.setText(cursor.getString(
 							cursor.getColumnIndex(DB.KEY_TIME)));
 			kind.setText(cursor.getString(
 							cursor.getColumnIndex(DB.KEY_KIND)));
-			
+			if(cursor.getInt(cursor.getColumnIndex(DB.KEY_MYLOVE))!=1){
+	        	b.setChecked(false);
+	        }else{
+	        	b.setChecked(true);
+	        }
 			//byte[] bb = cursor.getBlob(cursor.getColumnIndex(DB.KEY_IMAGE));
 			//image.setImageBitmap(BitmapFactory.decodeByteArray(bb, 0, bb.length));
 			//從cursor撈圖片出來轉檔放在ImageView的程式碼

@@ -18,7 +18,7 @@ public class PushRoot extends Fragment {
 		//設定碎片容器
 		
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		Fragment fm = new PushMain();
+		Fragment fm = MainDeyrk.PM;
 		fm.setArguments(getArguments());
 		//繼續傳遞bundle
 		transaction.replace(R.id.root_push, fm);

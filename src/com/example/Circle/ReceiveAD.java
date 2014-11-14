@@ -80,7 +80,7 @@ public class ReceiveAD extends Fragment {
 		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
 		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
 		                    	FragmentTransaction trans = getFragmentManager().beginTransaction();  
-		                        trans.replace(R.id.root_receice, new ReceiveMain());  
+		                        trans.replace(R.id.root_receice, MainDeyrk.RM);  
 		                        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		                        //trans.addToBackStack("PushMain");  
 		                        trans.commit();
@@ -207,7 +207,7 @@ public class ReceiveAD extends Fragment {
 		        
 		        if(mCursor.getCount()==0){
 		        	pre_btn.setVisibility(View.INVISIBLE);
-		    }
+		        }
 			mCursor = mDbHelper.getlistad_receive(adid);
 	        //呼叫DB的getAll函式，取得資料放進mCursor(資料庫資料的容器)
 	        if(mCursor != null){

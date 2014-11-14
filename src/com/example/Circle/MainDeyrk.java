@@ -1,6 +1,7 @@
 package com.example.Circle;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -75,6 +76,7 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 	static FilesSelect FS = new FilesSelect();
 	static ReceiveMain RM = new ReceiveMain();
 	static CollectionMain CM = new CollectionMain();
+	static PushMain PM = new PushMain();
 	public static boolean isOwnerInfo;
 	public static boolean isFormedInfo;
 	static final Handler handler = new Handler();
@@ -83,9 +85,9 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
 	DB mDbHelper = new DB(this);
 	private PushServerAsyncTask psat;
 	int nowPage = 0;
-	public static int pushAD_count = 0;
 	private FileServerAsyncTask fsat;
 	private int PORT1 =8898;
+	private int PORT2 =8899;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,12 +146,54 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
             public void onPageSelected(int position) {
             	nowPage = position;
             	if(nowPage==0){
-            		handler.post(MainDeyrk.runnable_connect);
+            		/*try {
+						fsat.serverSocket.close();
+					} catch (Exception e1) {
+						Toast.makeText(getApplicationContext(), "fsat e: "+e1.getMessage(),Toast.LENGTH_SHORT).show();
+					}*/
             		try {
 						RM.setAdapter();
 					} catch (Exception e) {
+					}
+            		handler.post(MainDeyrk.runnable_connect);
+            	}
+            	else if(nowPage==1){
+            		/*try {
+						fsat.serverSocket.close();
+					} catch (Exception e1) {
+						Toast.makeText(getApplicationContext(), "fsat e: "+e1.getMessage(),Toast.LENGTH_SHORT).show();
+					}*/
+            		try {
+						PM.setAdapter();
+					} catch (Exception e) {
 						
 					}
+            		//pushAndReceive();
+            	}
+            	else if(nowPage==2){
+            		try {
+						psat.serverSocket.close();
+					} catch (Exception e1) {
+						Toast.makeText(getApplicationContext(), "psat e: "+e1.getMessage(),Toast.LENGTH_SHORT).show();
+					}
+            		if(isOwnerInfo && isFormedInfo){
+                		try{
+                			fsat = new FileServerAsyncTask(getApplicationContext());
+                    		fsat.execute(PORT1+"");
+                    		Toast.makeText(getApplicationContext(), "owner等待接收檔案！",Toast.LENGTH_SHORT).show();
+                    	}catch(Exception e){
+                    		Toast.makeText(getApplicationContext(), "oe: "+e.getMessage(),Toast.LENGTH_SHORT).show();
+                    	}
+                	}
+                	else if(isFormedInfo){
+                		try{
+                			fsat = new FileServerAsyncTask(getApplicationContext());
+                    		fsat.execute(PORT2+"");
+                    		Toast.makeText(getApplicationContext(), "client等待接收檔案！",Toast.LENGTH_SHORT).show();
+                    	}catch(Exception e){
+                    		Toast.makeText(getApplicationContext(), "ce: "+e.getMessage(),Toast.LENGTH_SHORT).show();
+                    	}
+                	}
             	}
             	else if(nowPage==3){
             		try {
@@ -378,7 +422,7 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
     			}
     		}
         }
-        else if(isFormedInfo && pushAD_count>0){
+        else if(isFormedInfo){
         	Toast.makeText(getApplicationContext(), "我是商家！",Toast.LENGTH_SHORT).show();
         	//client
             
@@ -431,29 +475,14 @@ public class MainDeyrk extends FragmentActivity implements ActionBar.TabListener
         localIP = Utils.getIPAddress(true);
         IP_SERVER = info.groupOwnerAddress.getHostAddress();
         
-        if(nowPage==2){
-        	if(isOwnerInfo && isFormedInfo){
-        		try{
-        			psat.cancel(true);
-        			fsat = new FileServerAsyncTask(this);
-            		fsat.execute(PORT1+"");
-            		Toast.makeText(getApplicationContext(), "等待接收檔案！",Toast.LENGTH_SHORT).show();
-            	}catch(Exception e){
-            		
-            	}
-        	}
-        	else if(isFormedInfo){
-        		try{
-            		FM.changeToSelect();
-            	}catch(Exception e){
-            		
-            	}
-        	}
-        }
-        else{
+        try{
+    		FM.changeToSelect();
+    	}catch(Exception e){
+    		
+    	}
+        if(nowPage==0 || nowPage==1){
         	pushAndReceive();
         }
-        
         
         /*
         String client_mac_fixed = new String(device.deviceAddress).replace("99", "19");

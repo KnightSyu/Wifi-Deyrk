@@ -131,7 +131,7 @@ public class DB {
 				null,
 				null,
 				null,
-				KEY_TIME + " DESC");
+				null);
 	}
 	public Cursor getAllReceive(){
 		
@@ -328,6 +328,11 @@ public class DB {
 		ContentValues args = new ContentValues();
 		args.put(KEY_MYLOVE,myloverecord);
 		return db.update(DATABASE_TABLE_RECEIVE, args, KEY_ROWID + "=" + rowId, null) > 0;
+	}
+	public boolean loveupdate_push(Long rowId,int myloverecord){
+		ContentValues args = new ContentValues();
+		args.put(KEY_MYLOVE,myloverecord);
+		return db.update(DATABASE_TABLE2_PUSH, args, KEY_ROWID + "=" + rowId, null) > 0;
 	}
 	
 	

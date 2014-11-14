@@ -82,7 +82,7 @@ public class FilesSelect extends Fragment {
     	initialViews();
     	onClickListeners();
     	connected_device.setText(device_info);
-    	
+    	/*
     	if(isOwnerInfo && isFormedInfo){
     		fsat = new FileServerAsyncTask(this.getActivity(),progress);
     		fsat.execute(PORT1+"");
@@ -90,7 +90,7 @@ public class FilesSelect extends Fragment {
     	else if(isFormedInfo){
     		fsat = new FileServerAsyncTask(this.getActivity(),progress);
     		fsat.execute(PORT2+"");
-    	}
+    	}*/
     	
     	//transferUpdate();
     	
@@ -188,7 +188,6 @@ public class FilesSelect extends Fragment {
 	};
 	
 	public void changeToFilesMain(){
-		fsat.cancel(true);
 		Fragment fragment = MainDeyrk.FM;
 		FragmentTransaction trans = getFragmentManager().beginTransaction();
 	    trans.replace(R.id.root_files, fragment);

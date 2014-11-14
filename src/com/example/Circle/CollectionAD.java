@@ -68,7 +68,7 @@ public class CollectionAD extends Fragment {
 		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
 		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
 		                    	FragmentTransaction trans = getFragmentManager().beginTransaction();  
-		                        trans.replace(R.id.root_collection, new CollectionMain());  
+		                        trans.replace(R.id.root_collection, MainDeyrk.CM);  
 		                        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		                        //trans.addToBackStack("PushMain");  
 		                        trans.commit();

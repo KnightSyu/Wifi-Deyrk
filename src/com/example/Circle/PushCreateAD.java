@@ -92,7 +92,7 @@ public class PushCreateAD extends Fragment {
 		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
 		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
 		                    	FragmentTransaction trans = getFragmentManager().beginTransaction();  
-		                        trans.replace(R.id.root_push, new PushMain());  
+		                        trans.replace(R.id.root_push, MainDeyrk.PM);  
 		                        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		                        //trans.addToBackStack("PushMain");  
 		                        trans.commit();
@@ -166,12 +166,9 @@ public class PushCreateAD extends Fragment {
             	}
             
             }
-            	
-            
-            
             
             FragmentTransaction trans = getFragmentManager().beginTransaction();  
-            trans.replace(R.id.root_push, new PushMain());  
+            trans.replace(R.id.root_push, MainDeyrk.PM);  
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             //trans.addToBackStack("PushMain");  
             trans.commit();
@@ -186,7 +183,7 @@ public class PushCreateAD extends Fragment {
     	public void onClick(View v){
     		
     		FragmentTransaction trans = getFragmentManager().beginTransaction();  
-            trans.replace(R.id.root_push, new PushMain());  
+            trans.replace(R.id.root_push, MainDeyrk.PM);  
             trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             //trans.addToBackStack("PushMain");  
             trans.commit();

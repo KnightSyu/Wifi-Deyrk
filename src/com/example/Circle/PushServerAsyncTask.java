@@ -29,8 +29,8 @@ import android.widget.Toast;
 public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
 
     private Context context;
-    private ServerSocket serverSocket = null;
-    private Socket client = null;
+    ServerSocket serverSocket = null;
+    Socket client = null;
     private int PORT;
     String[] title;
 	String[] context_save;
@@ -84,6 +84,9 @@ public class PushServerAsyncTask extends AsyncTask<String, Integer, String> {
         	
             return "接收推播訊息成功！";
         } catch (IOException e) {
+            return e.getMessage();
+        }
+        catch (Exception e) {
             return e.getMessage();
         }
     }
