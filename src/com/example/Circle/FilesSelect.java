@@ -26,9 +26,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
@@ -113,6 +115,28 @@ public class FilesSelect extends Fragment {
             	 }
              } 
         }, 5000);*/
+    	
+    	rootView.setFocusableInTouchMode(true);
+		rootView.requestFocus();
+
+		rootView.setOnKeyListener(new OnKeyListener() {
+		        @Override
+		        public boolean onKey(View v, int keyCode, KeyEvent event) {
+		                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
+		                    	FragmentTransaction trans = getFragmentManager().beginTransaction();  
+		                        trans.replace(R.id.root_files, MainDeyrk.FM);  
+		                        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+		                        //trans.addToBackStack("PushMain");  
+		                        trans.commit();
+		                    	
+		                    return true;
+		                    }
+		                }
+		                return false;
+		            }
+		        });
     	
     	return rootView;
     }

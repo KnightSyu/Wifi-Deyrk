@@ -7,9 +7,11 @@ import android.support.v4.widget.CursorAdapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -52,7 +54,10 @@ public class ReceiveMain extends ListFragment {
 			}
         });
         
+    	
     	return rootView;
+        
+    	
     }
     
 

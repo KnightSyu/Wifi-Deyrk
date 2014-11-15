@@ -1,12 +1,15 @@
 package com.example.Circle;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.NumberPicker;
@@ -91,6 +94,6 @@ public class SetMain extends Fragment {
         numPicker.setMinValue(0);    
         numPicker.setValue(24);
     	
-    	return rootView;
+   return rootView;
     }
 }

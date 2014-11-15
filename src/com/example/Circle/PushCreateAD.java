@@ -90,7 +90,6 @@ public class PushCreateAD extends Fragment {
 		        public boolean onKey(View v, int keyCode, KeyEvent event) {
 		                if (event.getAction() == KeyEvent.ACTION_DOWN) {
 		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
 		                    	FragmentTransaction trans = getFragmentManager().beginTransaction();  
 		                        trans.replace(R.id.root_push, MainDeyrk.PM);  
 		                        trans.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

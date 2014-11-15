@@ -55,7 +55,7 @@ public class CollectionMain extends ListFragment {
 			}
         });
         
-    	return rootView;
+        return rootView;
     }
     
     public void setAdapter() {
@@ -73,27 +73,6 @@ public class CollectionMain extends ListFragment {
             //執行接口
         }
         
-        
-        
-        rootView.setFocusableInTouchMode(true);
-		rootView.requestFocus();
-
-		rootView.setOnKeyListener(new OnKeyListener() {
-		        @Override
-		        public boolean onKey(View v, int keyCode, KeyEvent event) {
-		                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-		                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-		                        //Toast.makeText(getActivity(), "Back Pressed", Toast.LENGTH_SHORT).show();
-		                    	
-		                    	
-		                    	
-		                    return true;
-		                    }
-		                }
-		                return false;
-		            }
-		        });
-		
 	}
     
     //ListCursorAdapter接口
